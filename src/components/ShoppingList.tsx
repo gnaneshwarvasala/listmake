@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { Plus } from "lucide-react";
+import { Plus, Lock, Unlock, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ListItem from "./ListItem";
@@ -15,6 +15,7 @@ interface Item {
 const ShoppingList = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [newItemText, setNewItemText] = useState("");
+  const [isLocked, setIsLocked] = useState(false);
 
   const addItem = () => {
     if (!newItemText.trim()) {
@@ -30,7 +31,9 @@ const ShoppingList = () => {
     
     setItems([...items, newItem]);
     setNewItemText("");
-    toast.success("Item added to list");
+    toast.success(`Added "${newItemText}" to your list`, {
+      style: { background: '#8B5CF6', color: 'white' }
+    });
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -51,6 +54,21 @@ const ShoppingList = () => {
     );
   };
 
+  const deleteItem = (id: string) => {
+    const itemToDelete = items.find(item => item.id === id);
+    setItems(items.filter(item => item.id !== id));
+    toast(`Deleted "${itemToDelete?.text}"`, {
+      style: { background: '#EF4444', color: 'white' }
+    });
+  };
+
+  const toggleLock = () => {
+    setIsLocked(!isLocked);
+    toast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`, {
+      style: { background: '#3B82F6', color: 'white' }
+    });
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
       <div className="flex gap-2">
@@ -59,11 +77,23 @@ const ShoppingList = () => {
           placeholder="Add new item..."
           value={newItemText}
           onChange={(e) => setNewItemText(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && addItem()}
+          onKeyPress={(e) => e.key === "Enter" && !isLocked && addItem()}
           className="flex-1"
+          disabled={isLocked}
         />
-        <Button onClick={addItem}>
+        <Button onClick={addItem} disabled={isLocked}>
           <Plus className="h-5 w-5" />
+        </Button>
+        <Button 
+          variant="outline" 
+          onClick={toggleLock}
+          className={isLocked ? "bg-blue-50" : ""}
+        >
+          {isLocked ? (
+            <Lock className="h-5 w-5 text-blue-500" />
+          ) : (
+            <Unlock className="h-5 w-5" />
+          )}
         </Button>
       </div>
 
@@ -83,6 +113,8 @@ const ShoppingList = () => {
                   text={item.text}
                   isCollected={item.isCollected}
                   onToggleCollected={toggleCollected}
+                  onDelete={deleteItem}
+                  isLocked={isLocked}
                 />
               ))}
               {provided.placeholder}
