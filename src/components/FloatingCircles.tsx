@@ -2,7 +2,7 @@ import React from "react";
 
 const FloatingCircles = () => {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50">
       {[...Array(5)].map((_, i) => (
         <div
           key={i}
@@ -13,7 +13,6 @@ const FloatingCircles = () => {
             height: `${Math.random() * 200 + 100}px`,
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            animation: `float-${i + 1} ${Math.random() * 10 + 10}s infinite linear`
           }}
         />
       ))}
