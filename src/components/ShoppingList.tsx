@@ -47,11 +47,13 @@ const ShoppingList = () => {
   };
 
   const toggleCollected = (id: string) => {
-    setItems(
-      items.map((item) =>
-        item.id === id ? { ...item, isCollected: !item.isCollected } : item
-      )
-    );
+    if (!isLocked) {
+      setItems(
+        items.map((item) =>
+          item.id === id ? { ...item, isCollected: !item.isCollected } : item
+        )
+      );
+    }
   };
 
   const deleteItem = (id: string) => {
@@ -82,7 +84,7 @@ const ShoppingList = () => {
           disabled={isLocked}
         />
         <Button onClick={addItem} disabled={isLocked}>
-          <Plus className="h-5 w-5" />
+          <Plus className="h-5 w-5 text-purple-100" />
         </Button>
         <Button 
           variant="outline" 
