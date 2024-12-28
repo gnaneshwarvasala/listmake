@@ -8,7 +8,13 @@ const FloatingCircles = () => {
           key={i}
           className={`absolute rounded-full mix-blend-multiply filter blur-xl animate-float-${i + 1}`}
           style={{
-            background: "radial-gradient(circle, rgba(139,92,246,0.3) 0%, rgba(139,92,246,0) 70%)",
+            background: [
+              "radial-gradient(circle, rgba(242,252,226,0.6) 0%, rgba(242,252,226,0) 70%)",
+              "radial-gradient(circle, rgba(254,247,205,0.6) 0%, rgba(254,247,205,0) 70%)",
+              "radial-gradient(circle, rgba(229,222,255,0.6) 0%, rgba(229,222,255,0) 70%)",
+              "radial-gradient(circle, rgba(255,222,226,0.6) 0%, rgba(255,222,226,0) 70%)",
+              "radial-gradient(circle, rgba(211,228,253,0.6) 0%, rgba(211,228,253,0) 70%)",
+            ][i],
             width: `${Math.random() * 200 + 100}px`,
             height: `${Math.random() * 200 + 100}px`,
             left: `${Math.random() * 100}%`,
