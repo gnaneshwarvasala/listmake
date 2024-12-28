@@ -1,4 +1,4 @@
-import { ShoppingList } from "@/components/ShoppingList";
+import ShoppingList from "@/components/ShoppingList";
 
 const Index = () => {
   return (
