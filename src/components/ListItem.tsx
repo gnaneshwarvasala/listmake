@@ -36,7 +36,6 @@ const ListItem = ({
             isCollected && "border-green-200 bg-gradient-to-r from-green-50/80 to-emerald-50/80 scale-[0.98]",
             !isLocked && "cursor-grab active:cursor-grabbing"
           )}
-          onClick={() => !isLocked && onToggleCollected(id)}
         >
           <div
             className={cn(
@@ -44,6 +43,7 @@ const ListItem = ({
               isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300 hover:border-gray-400",
               !isLocked && "cursor-pointer"
             )}
+            onClick={() => onToggleCollected(id)}
           >
             {isCollected && <Check className="h-4 w-4 text-white animate-scale-in" />}
           </div>
@@ -54,6 +54,11 @@ const ListItem = ({
             )}
           >
             {text}
+            {isCollected && (
+              <span className="ml-2 text-sm text-green-600/50 italic">
+                Completed
+              </span>
+            )}
           </span>
           {!isLocked && (
             <Button

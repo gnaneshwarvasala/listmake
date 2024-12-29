@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { Plus, Lock, Unlock, Trash2 } from "lucide-react";
+import { Plus, Lock, Unlock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ListItem from "./ListItem";
@@ -32,12 +32,12 @@ const ShoppingList = () => {
     setItems([...items, newItem]);
     setNewItemText("");
     toast.success(`Added "${newItemText}" to your list`, {
-      style: { background: '#8B5CF6', color: 'white' }
+      style: { background: '#D3E4FD', color: '#1e40af' }
     });
   };
 
   const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
+    if (!result.destination || isLocked) return;
 
     const newItems = Array.from(items);
     const [reorderedItem] = newItems.splice(result.source.index, 1);
@@ -53,6 +53,12 @@ const ShoppingList = () => {
           item.id === id ? { ...item, isCollected: !item.isCollected } : item
         )
       );
+      const item = items.find(item => item.id === id);
+      if (item) {
+        toast.success(`Marked "${item.text}" as ${!item.isCollected ? 'completed' : 'incomplete'}`, {
+          style: { background: '#F2FCE2', color: '#166534' }
+        });
+      }
     }
   };
 
@@ -60,14 +66,14 @@ const ShoppingList = () => {
     const itemToDelete = items.find(item => item.id === id);
     setItems(items.filter(item => item.id !== id));
     toast(`Deleted "${itemToDelete?.text}"`, {
-      style: { background: '#EF4444', color: 'white' }
+      style: { background: '#fecaca', color: '#991b1b' }
     });
   };
 
   const toggleLock = () => {
     setIsLocked(!isLocked);
     toast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`, {
-      style: { background: '#3B82F6', color: 'white' }
+      style: { background: '#D3E4FD', color: '#1e40af' }
     });
   };
 
@@ -84,7 +90,7 @@ const ShoppingList = () => {
           disabled={isLocked}
         />
         <Button onClick={addItem} disabled={isLocked}>
-          <Plus className="h-5 w-5 text-purple-100" />
+          <Plus className="h-5 w-5 text-purple-200" />
         </Button>
         <Button 
           variant="outline" 
