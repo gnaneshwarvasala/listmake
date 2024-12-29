@@ -19,7 +19,9 @@ const ShoppingList = () => {
 
   const addItem = () => {
     if (!newItemText.trim()) {
-      toast.error("Please enter an item");
+      toast.error("Please enter an item", {
+        style: { background: '#fecaca', color: '#991b1b' }
+      });
       return;
     }
     
@@ -92,14 +94,14 @@ const ShoppingList = () => {
         <Button 
           onClick={addItem} 
           disabled={isLocked}
-          className="bg-purple-500 hover:bg-purple-600"
+          className="bg-purple-500 hover:bg-purple-600 transition-colors duration-300"
         >
           <Plus className="h-5 w-5 text-white" />
         </Button>
         <Button 
           variant="outline" 
           onClick={toggleLock}
-          className={isLocked ? "bg-blue-50" : ""}
+          className={`transition-colors duration-300 ${isLocked ? "bg-blue-50" : ""}`}
         >
           {isLocked ? (
             <Lock className="h-5 w-5 text-blue-500" />
