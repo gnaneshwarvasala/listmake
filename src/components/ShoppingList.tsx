@@ -20,6 +20,7 @@ const ShoppingList = () => {
   const addItem = () => {
     if (!newItemText.trim()) {
       toast.error("Please enter an item", {
+        duration: 3000,
         style: { background: '#fecaca', color: '#991b1b' }
       });
       return;
@@ -34,6 +35,7 @@ const ShoppingList = () => {
     setItems([...items, newItem]);
     setNewItemText("");
     toast.success(`Added "${newItemText}" to your list`, {
+      duration: 3000,
       style: { background: '#D3E4FD', color: '#1e40af' }
     });
   };
@@ -58,6 +60,7 @@ const ShoppingList = () => {
       const item = items.find(item => item.id === id);
       if (item) {
         toast.success(`Marked "${item.text}" as ${!item.isCollected ? 'completed' : 'incomplete'}`, {
+          duration: 3000,
           style: { background: '#F2FCE2', color: '#166534' }
         });
       }
@@ -68,6 +71,7 @@ const ShoppingList = () => {
     const itemToDelete = items.find(item => item.id === id);
     setItems(items.filter(item => item.id !== id));
     toast(`Deleted "${itemToDelete?.text}"`, {
+      duration: 3000,
       style: { background: '#fecaca', color: '#991b1b' }
     });
   };
@@ -75,6 +79,7 @@ const ShoppingList = () => {
   const toggleLock = () => {
     setIsLocked(!isLocked);
     toast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`, {
+      duration: 3000,
       style: { background: '#D3E4FD', color: '#1e40af' }
     });
   };
