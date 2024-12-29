@@ -33,7 +33,7 @@ const ListItem = ({
           className={cn(
             "group relative flex items-center gap-2 rounded-lg border p-4 shadow-sm transition-all duration-300",
             "hover:border-blue-200 hover:shadow-md",
-            isCollected && "border-green-200 bg-gradient-to-r from-green-50/80 to-emerald-50/80 scale-[0.98]",
+            isCollected && "border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 scale-[0.98]",
             !isLocked && "cursor-grab active:cursor-grabbing"
           )}
         >
@@ -43,7 +43,7 @@ const ListItem = ({
               isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300 hover:border-gray-400",
               !isLocked && "cursor-pointer"
             )}
-            onClick={() => onToggleCollected(id)}
+            onClick={() => !isLocked && onToggleCollected(id)}
           >
             {isCollected && <Check className="h-4 w-4 text-white animate-scale-in" />}
           </div>
@@ -55,7 +55,7 @@ const ListItem = ({
           >
             {text}
             {isCollected && (
-              <span className="ml-2 text-sm text-green-600/50 italic">
+              <span className="ml-2 text-sm text-green-600 italic">
                 Completed
               </span>
             )}

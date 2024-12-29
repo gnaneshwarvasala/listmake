@@ -89,8 +89,12 @@ const ShoppingList = () => {
           className="flex-1"
           disabled={isLocked}
         />
-        <Button onClick={addItem} disabled={isLocked}>
-          <Plus className="h-5 w-5 text-purple-200" />
+        <Button 
+          onClick={addItem} 
+          disabled={isLocked}
+          className="bg-purple-500 hover:bg-purple-600"
+        >
+          <Plus className="h-5 w-5 text-white" />
         </Button>
         <Button 
           variant="outline" 
