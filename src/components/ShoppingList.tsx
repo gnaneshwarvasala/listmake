@@ -16,6 +16,14 @@ interface Item {
   isCollected: boolean;
 }
 
+// Declare the SpeechRecognition type
+declare global {
+  interface Window {
+    webkitSpeechRecognition: new () => SpeechRecognition;
+    SpeechRecognition: new () => SpeechRecognition;
+  }
+}
+
 const getBackgroundClass = (category: CategoryType) => {
   const backgrounds = {
     grocery: "from-green-100/80 via-emerald-50/80 to-teal-50/80",
@@ -83,8 +91,9 @@ const ShoppingList = () => {
     }
 
     try {
-      const SpeechRecognition = window.webkitSpeechRecognition;
+      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
+      
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-US';
