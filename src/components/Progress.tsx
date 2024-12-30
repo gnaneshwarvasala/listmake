@@ -15,7 +15,13 @@ const ProgressBar = ({ total, completed }: ProgressBarProps) => {
         <span className="text-gray-600 dark:text-gray-400">
           {completed} of {total} completed
         </span>
-        <span className="text-purple-600 dark:text-purple-400 font-semibold">
+        <span className={`font-semibold transition-colors duration-300 ${
+          percentage === 100 
+            ? 'text-green-600 dark:text-green-400' 
+            : percentage > 50 
+              ? 'text-purple-600 dark:text-purple-400'
+              : 'text-blue-600 dark:text-blue-400'
+        }`}>
           {percentage}%
         </span>
       </div>
@@ -25,8 +31,17 @@ const ProgressBar = ({ total, completed }: ProgressBarProps) => {
           className="h-3 bg-gray-100 dark:bg-gray-700"
         />
         <div 
-          className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-20 rounded-full"
-          style={{ width: `${percentage}%`, transition: 'width 0.5s ease-in-out' }}
+          className={`absolute inset-0 bg-gradient-to-r transition-all duration-500 rounded-full ${
+            percentage === 100 
+              ? 'from-green-500 to-emerald-500' 
+              : percentage > 50 
+                ? 'from-purple-500 to-pink-500'
+                : 'from-blue-500 to-cyan-500'
+          } opacity-20`}
+          style={{ 
+            width: `${percentage}%`, 
+            transition: 'width 0.5s ease-in-out, background 0.5s ease-in-out' 
+          }}
         />
       </div>
     </div>
