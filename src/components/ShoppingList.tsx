@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { Plus, Lock, Unlock, Mic } from "lucide-react";
+import { Plus, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import ListItem from "./ListItem";
+import ListItemBox from "./ListItemBox";
 import { toast } from "sonner";
-import CategorySelector, { CategoryType } from "./CategorySelector";
+import { CategoryType } from "./CategorySelector";
 import ProgressBar from "./Progress";
 import confetti from 'canvas-confetti';
+import ListHeader from "./ListHeader";
 
 interface Item {
   id: string;
@@ -35,6 +36,7 @@ const ShoppingList = () => {
   const [isLocked, setIsLocked] = useState(false);
   const [category, setCategory] = useState<CategoryType>("grocery");
   const [isListening, setIsListening] = useState(false);
+  const [customTitle, setCustomTitle] = useState("");
 
   useEffect(() => {
     const completedCount = items.filter(item => item.isCollected).length;
@@ -52,7 +54,7 @@ const ShoppingList = () => {
       return Math.random() * (max - min) + min;
     }
 
-    const interval: any = setInterval(function() {
+    const interval = setInterval(function() {
       const timeLeft = animationEnd - Date.now();
 
       if (timeLeft <= 0) {
@@ -116,11 +118,11 @@ const ShoppingList = () => {
   };
 
   const addItem = (text?: string) => {
+    if (isLocked) return;
+    
     const itemText = text || newItemText;
     if (!itemText.trim()) {
-      toast.error("Please enter an item", {
-        duration: 3000,
-      });
+      toast.error("Please enter an item");
       return;
     }
     
@@ -133,7 +135,7 @@ const ShoppingList = () => {
     setItems([...items, newItem]);
     setNewItemText("");
     toast.success(`Added "${itemText}" to your list`, {
-      duration: 3000,
+      style: { background: '#22c55e', color: 'white' }
     });
   };
 
@@ -156,7 +158,7 @@ const ShoppingList = () => {
     const item = items.find(item => item.id === id);
     if (item) {
       toast.success(`Marked "${item.text}" as ${!item.isCollected ? 'completed' : 'incomplete'}`, {
-        duration: 3000,
+        style: { background: '#3b82f6', color: 'white' }
       });
     }
   };
@@ -166,7 +168,7 @@ const ShoppingList = () => {
       const itemToDelete = items.find(item => item.id === id);
       setItems(items.filter(item => item.id !== id));
       toast(`Deleted "${itemToDelete?.text}"`, {
-        duration: 3000,
+        style: { background: '#ef4444', color: 'white' }
       });
     }
   };
@@ -183,7 +185,15 @@ const ShoppingList = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-br ${getBackgroundClass(category)} backdrop-blur-sm p-4 md:p-8 transition-all duration-500`}>
       <div className="w-full max-w-2xl mx-auto space-y-6">
-        <CategorySelector category={category} onCategoryChange={setCategory} />
+        <ListHeader
+          category={category}
+          onCategoryChange={setCategory}
+          isLocked={isLocked}
+          onToggleLock={toggleLock}
+          customTitle={customTitle}
+          onCustomTitleChange={setCustomTitle}
+        />
+        
         <ProgressBar total={items.length} completed={completedItems} />
         
         <div className="flex gap-2">
@@ -210,17 +220,6 @@ const ShoppingList = () => {
           >
             <Mic className={`h-5 w-5 text-white ${isListening ? 'animate-pulse' : ''}`} />
           </Button>
-          <Button 
-            variant="outline" 
-            onClick={toggleLock}
-            className={`transition-colors duration-300 ${isLocked ? "bg-blue-50" : ""}`}
-          >
-            {isLocked ? (
-              <Lock className="h-5 w-5 text-blue-500" />
-            ) : (
-              <Unlock className="h-5 w-5" />
-            )}
-          </Button>
         </div>
 
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -232,7 +231,7 @@ const ShoppingList = () => {
                 className="space-y-3"
               >
                 {items.map((item, index) => (
-                  <ListItem
+                  <ListItemBox
                     key={item.id}
                     id={item.id}
                     index={index}
