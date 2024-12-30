@@ -6,7 +6,7 @@ const Welcome = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100">
       <FloatingCircles />
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4 text-center">
         <div className="animate-scale-in space-y-6 max-w-2xl mx-auto">
@@ -18,7 +18,7 @@ const Welcome = () => {
           </p>
           <Button 
             onClick={() => navigate("/lists")} 
-            className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-6 text-lg rounded-lg transition-all duration-300 animate-bounce"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-6 text-lg rounded-lg transition-all duration-700 hover:scale-105 transform"
           >
             Get Started
           </Button>

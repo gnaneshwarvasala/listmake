@@ -24,9 +24,9 @@ interface CategorySelectorProps {
 
 const categories = [
   { value: "grocery", label: "Grocery List" },
-  { value: "travel", label: "Travel Places" },
   { value: "meal", label: "Meal Planner" },
   { value: "budget", label: "Budget List" },
+  { value: "travel", label: "Travel Places" },
   { value: "event", label: "Event Planning" },
   { value: "bucket", label: "Bucket List" },
   { value: "party", label: "Party Planning" },
@@ -40,12 +40,16 @@ const CategorySelector = ({ category, onCategoryChange }: CategorySelectorProps)
         value={category}
         onValueChange={(value) => onCategoryChange(value as CategoryType)}
       >
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full bg-white/50 backdrop-blur-sm border-purple-200 hover:border-purple-300 transition-colors">
           <SelectValue placeholder="Select a category" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-white/80 backdrop-blur-sm">
           {categories.map((cat) => (
-            <SelectItem key={cat.value} value={cat.value}>
+            <SelectItem 
+              key={cat.value} 
+              value={cat.value}
+              className="hover:bg-purple-50 cursor-pointer"
+            >
               {cat.label}
             </SelectItem>
           ))}
