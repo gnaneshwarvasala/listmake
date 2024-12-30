@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ListItem from "./ListItem";
 import { toast } from "sonner";
+import CategorySelector, { CategoryType } from "./CategorySelector";
+import ProgressBar from "./Progress";
 
 interface Item {
   id: string;
@@ -12,10 +14,25 @@ interface Item {
   isCollected: boolean;
 }
 
+const getBackgroundClass = (category: CategoryType) => {
+  const backgrounds = {
+    grocery: "from-green-100 via-emerald-50 to-teal-50",
+    travel: "from-blue-100 via-indigo-50 to-purple-50",
+    meal: "from-orange-100 via-amber-50 to-yellow-50",
+    budget: "from-emerald-100 via-green-50 to-lime-50",
+    event: "from-purple-100 via-fuchsia-50 to-pink-50",
+    bucket: "from-cyan-100 via-sky-50 to-blue-50",
+    party: "from-pink-100 via-rose-50 to-red-50",
+    custom: "from-violet-100 via-purple-50 to-indigo-50"
+  };
+  return backgrounds[category];
+};
+
 const ShoppingList = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [newItemText, setNewItemText] = useState("");
   const [isLocked, setIsLocked] = useState(false);
+  const [category, setCategory] = useState<CategoryType>("grocery");
 
   const addItem = () => {
     if (!newItemText.trim()) {
@@ -84,63 +101,70 @@ const ShoppingList = () => {
     });
   };
 
-  return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
-      <div className="flex gap-2">
-        <Input
-          type="text"
-          placeholder="Add new item..."
-          value={newItemText}
-          onChange={(e) => setNewItemText(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && !isLocked && addItem()}
-          className="flex-1"
-          disabled={isLocked}
-        />
-        <Button 
-          onClick={addItem} 
-          disabled={isLocked}
-          className="bg-purple-500 hover:bg-purple-600 transition-colors duration-300"
-        >
-          <Plus className="h-5 w-5 text-white" />
-        </Button>
-        <Button 
-          variant="outline" 
-          onClick={toggleLock}
-          className={`transition-colors duration-300 ${isLocked ? "bg-blue-50" : ""}`}
-        >
-          {isLocked ? (
-            <Lock className="h-5 w-5 text-blue-500" />
-          ) : (
-            <Unlock className="h-5 w-5" />
-          )}
-        </Button>
-      </div>
+  const completedItems = items.filter(item => item.isCollected).length;
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="shopping-list">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="space-y-3"
-            >
-              {items.map((item, index) => (
-                <ListItem
-                  key={item.id}
-                  id={item.id}
-                  index={index}
-                  text={item.text}
-                  isCollected={item.isCollected}
-                  onToggleCollected={toggleCollected}
-                  onDelete={deleteItem}
-                  isLocked={isLocked}
-                />
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+  return (
+    <div className={`min-h-screen bg-gradient-to-br ${getBackgroundClass(category)} p-4 md:p-8 transition-colors duration-500`}>
+      <div className="w-full max-w-2xl mx-auto space-y-6">
+        <CategorySelector category={category} onCategoryChange={setCategory} />
+        <ProgressBar total={items.length} completed={completedItems} />
+        
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            placeholder="Add new item..."
+            value={newItemText}
+            onChange={(e) => setNewItemText(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && !isLocked && addItem()}
+            className="flex-1"
+            disabled={isLocked}
+          />
+          <Button 
+            onClick={addItem} 
+            disabled={isLocked}
+            className="bg-purple-500 hover:bg-purple-600 transition-colors duration-300"
+          >
+            <Plus className="h-5 w-5 text-white" />
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={toggleLock}
+            className={`transition-colors duration-300 ${isLocked ? "bg-blue-50" : ""}`}
+          >
+            {isLocked ? (
+              <Lock className="h-5 w-5 text-blue-500" />
+            ) : (
+              <Unlock className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="shopping-list">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="space-y-3"
+              >
+                {items.map((item, index) => (
+                  <ListItem
+                    key={item.id}
+                    id={item.id}
+                    index={index}
+                    text={item.text}
+                    isCollected={item.isCollected}
+                    onToggleCollected={toggleCollected}
+                    onDelete={deleteItem}
+                    isLocked={isLocked}
+                  />
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
     </div>
   );
 };
