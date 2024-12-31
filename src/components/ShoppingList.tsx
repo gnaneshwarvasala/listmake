@@ -1,53 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { Plus, Mic } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import ListItemBox from "./ListItemBox";
 import { toast } from "sonner";
 import { CategoryType } from "./CategorySelector";
 import ProgressBar from "./Progress";
 import confetti from 'canvas-confetti';
 import ListHeader from "./ListHeader";
+import ListItemBox from "./ListItemBox";
+import ListActions from "./ListActions";
+import Footer from "./Footer";
 
 interface Item {
   id: string;
   text: string;
   isCollected: boolean;
-}
-
-interface SpeechRecognition extends EventTarget {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  onstart: () => void;
-  onresult: (event: SpeechRecognitionEvent) => void;
-  onerror: (event: SpeechRecognitionError) => void;
-  onend: () => void;
-  start: () => void;
-  stop: () => void;
-}
-
-interface SpeechRecognitionEvent {
-  results: {
-    [index: number]: {
-      [index: number]: {
-        transcript: string;
-      };
-    };
-  };
-}
-
-interface SpeechRecognitionError extends Event {
-  error: string;
-}
-
-// Declare the SpeechRecognition type
-declare global {
-  interface Window {
-    webkitSpeechRecognition: new () => SpeechRecognition;
-    SpeechRecognition: new () => SpeechRecognition;
-  }
 }
 
 const getBackgroundClass = (category: CategoryType) => {
@@ -69,7 +34,6 @@ const ShoppingList = () => {
   const [newItemText, setNewItemText] = useState("");
   const [isLocked, setIsLocked] = useState(false);
   const [category, setCategory] = useState<CategoryType>("grocery");
-  const [isListening, setIsListening] = useState(false);
   const [customTitle, setCustomTitle] = useState("");
 
   useEffect(() => {
@@ -110,66 +74,23 @@ const ShoppingList = () => {
     }, 250);
   };
 
-  const startListening = async () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      toast.error("Speech recognition is not supported in this browser");
-      return;
-    }
-
-    try {
-      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-      const recognition = new SpeechRecognition();
-      
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'en-US';
-
-      recognition.onstart = () => {
-        setIsListening(true);
-        toast.info("Listening...");
-      };
-
-      recognition.onresult = (event) => {
-        const text = event.results[0][0].transcript;
-        setNewItemText(text);
-        addItem(text);
-      };
-
-      recognition.onerror = (event) => {
-        console.error('Speech recognition error', event.error);
-        setIsListening(false);
-        toast.error("Error with speech recognition");
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-      };
-
-      recognition.start();
-    } catch (error) {
-      console.error('Speech recognition error:', error);
-      toast.error("Error initializing speech recognition");
-    }
-  };
-
-  const addItem = (text?: string) => {
+  const addItem = () => {
     if (isLocked) return;
     
-    const itemText = text || newItemText;
-    if (!itemText.trim()) {
+    if (!newItemText.trim()) {
       toast.error("Please enter an item");
       return;
     }
     
     const newItem: Item = {
       id: Date.now().toString(),
-      text: itemText.trim(),
+      text: newItemText.trim(),
       isCollected: false,
     };
     
     setItems([...items, newItem]);
     setNewItemText("");
-    toast.success(`Added "${itemText}" to your list`, {
+    toast.success(`Added "${newItemText}" to your list`, {
       style: { background: '#22c55e', color: 'white' }
     });
   };
@@ -231,31 +152,12 @@ const ShoppingList = () => {
         
         <ProgressBar total={items.length} completed={completedItems} />
         
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            placeholder="Add new item..."
-            value={newItemText}
-            onChange={(e) => setNewItemText(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && !isLocked && addItem()}
-            className="flex-1"
-            disabled={isLocked}
-          />
-          <Button 
-            onClick={() => addItem()} 
-            disabled={isLocked}
-            className="bg-purple-500 hover:bg-purple-600 transition-colors duration-300"
-          >
-            <Plus className="h-5 w-5 text-white" />
-          </Button>
-          <Button
-            onClick={startListening}
-            disabled={isLocked || isListening}
-            className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
-          >
-            <Mic className={`h-5 w-5 text-white ${isListening ? 'animate-pulse' : ''}`} />
-          </Button>
-        </div>
+        <ListActions
+          newItemText={newItemText}
+          setNewItemText={setNewItemText}
+          isLocked={isLocked}
+          onAddItem={addItem}
+        />
 
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="shopping-list">
@@ -263,7 +165,7 @@ const ShoppingList = () => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="space-y-3"
+                className="space-y-3 max-w-xl mx-auto"
               >
                 {items.map((item, index) => (
                   <ListItemBox
@@ -283,6 +185,7 @@ const ShoppingList = () => {
           </Droppable>
         </DragDropContext>
       </div>
+      <Footer />
     </div>
   );
 };
