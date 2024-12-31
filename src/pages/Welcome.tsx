@@ -18,7 +18,9 @@ const Welcome = () => {
           </p>
           <Button 
             onClick={() => navigate("/lists")} 
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-6 text-lg rounded-lg transition-all duration-700 hover:scale-105 transform"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 
+                     text-white px-8 py-6 text-lg rounded-lg transition-all duration-700 
+                     hover:scale-105 transform hover:shadow-xl animate-pulse"
           >
             Get Started
           </Button>
