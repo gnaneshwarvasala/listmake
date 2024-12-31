@@ -22,29 +22,6 @@ const Welcome = () => {
           >
             Get Started
           </Button>
-          <div className="mt-8 space-x-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/about")}
-              className="text-gray-600 hover:text-gray-900"
-            >
-              About
-            </Button>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/privacy")}
-              className="text-gray-600 hover:text-gray-900"
-            >
-              Privacy Policy
-            </Button>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/faq")}
-              className="text-gray-600 hover:text-gray-900"
-            >
-              FAQ
-            </Button>
-          </div>
         </div>
       </div>
     </div>

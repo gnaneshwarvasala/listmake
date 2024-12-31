@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import ShoppingList from "@/components/ShoppingList";
 import FloatingCircles from "@/components/FloatingCircles";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -18,35 +19,13 @@ const Index = () => {
           >
             ← Back
           </Button>
-          <div className="space-x-2">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/about")}
-              className="text-sm"
-            >
-              About
-            </Button>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/privacy")}
-              className="text-sm"
-            >
-              Privacy
-            </Button>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/faq")}
-              className="text-sm"
-            >
-              FAQ
-            </Button>
-          </div>
         </div>
         <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">
           Shopping List
         </h1>
         <ShoppingList />
       </div>
+      <Footer />
     </div>
   );
 };
