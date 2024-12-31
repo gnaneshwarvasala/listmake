@@ -20,9 +20,6 @@ const Index = () => {
             ← Back
           </Button>
         </div>
-        <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">
-          Shopping List
-        </h1>
         <ShoppingList />
       </div>
       <Footer />
