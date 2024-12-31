@@ -16,6 +16,32 @@ interface Item {
   isCollected: boolean;
 }
 
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: () => void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionError) => void;
+  onend: () => void;
+  start: () => void;
+  stop: () => void;
+}
+
+interface SpeechRecognitionEvent {
+  results: {
+    [index: number]: {
+      [index: number]: {
+        transcript: string;
+      };
+    };
+  };
+}
+
+interface SpeechRecognitionError extends Event {
+  error: string;
+}
+
 // Declare the SpeechRecognition type
 declare global {
   interface Window {
