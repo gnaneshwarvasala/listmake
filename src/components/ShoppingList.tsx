@@ -7,7 +7,6 @@ import confetti from 'canvas-confetti';
 import ListHeader from "./ListHeader";
 import ListItemBox from "./ListItemBox";
 import ListActions from "./ListActions";
-import Footer from "./Footer";
 
 interface Item {
   id: string;
@@ -40,6 +39,9 @@ const ShoppingList = () => {
     const completedCount = items.filter(item => item.isCollected).length;
     if (completedCount === items.length && items.length > 0) {
       triggerCelebration();
+      toast.success("Congratulations! You completed the list! 🎉", {
+        duration: 5000,
+      });
     }
   }, [items]);
 
@@ -75,7 +77,10 @@ const ShoppingList = () => {
   };
 
   const addItem = () => {
-    if (isLocked) return;
+    if (isLocked) {
+      toast.error("List is locked. Unlock to add items.");
+      return;
+    }
     
     if (!newItemText.trim()) {
       toast.error("Please enter an item");
@@ -90,9 +95,7 @@ const ShoppingList = () => {
     
     setItems([...items, newItem]);
     setNewItemText("");
-    toast.success(`Added "${newItemText}" to your list`, {
-      style: { background: '#22c55e', color: 'white' }
-    });
+    toast.success(`Added "${newItemText}" to your list`);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -111,29 +114,21 @@ const ShoppingList = () => {
         item.id === id ? { ...item, isCollected: !item.isCollected } : item
       )
     );
-    const item = items.find(item => item.id === id);
-    if (item) {
-      toast.success(`Marked "${item.text}" as ${!item.isCollected ? 'completed' : 'incomplete'}`, {
-        style: { background: '#3b82f6', color: 'white' }
-      });
-    }
   };
 
   const deleteItem = (id: string) => {
-    if (!isLocked) {
-      const itemToDelete = items.find(item => item.id === id);
-      setItems(items.filter(item => item.id !== id));
-      toast(`Deleted "${itemToDelete?.text}"`, {
-        style: { background: '#ef4444', color: 'white' }
-      });
+    if (isLocked) {
+      toast.error("List is locked. Unlock to delete items.");
+      return;
     }
+    const itemToDelete = items.find(item => item.id === id);
+    setItems(items.filter(item => item.id !== id));
+    toast.success(`Deleted "${itemToDelete?.text}"`);
   };
 
   const toggleLock = () => {
     setIsLocked(!isLocked);
-    toast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`, {
-      duration: 3000,
-    });
+    toast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`);
   };
 
   const completedItems = items.filter(item => item.isCollected).length;
@@ -165,7 +160,7 @@ const ShoppingList = () => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="space-y-3 max-w-xl mx-auto"
+                className="space-y-3"
               >
                 {items.map((item, index) => (
                   <ListItemBox
@@ -185,7 +180,6 @@ const ShoppingList = () => {
           </Droppable>
         </DragDropContext>
       </div>
-      <Footer />
     </div>
   );
 };

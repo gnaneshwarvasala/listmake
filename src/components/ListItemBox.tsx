@@ -31,24 +31,24 @@ const ListItemBox = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            "group relative flex items-center gap-2 rounded-lg border p-4 shadow-sm transition-all duration-300 cursor-pointer",
-            "hover:border-blue-200 hover:shadow-md",
+            "group relative flex items-center gap-2 rounded-lg border p-3 shadow-sm transition-all duration-300",
+            "max-w-xl mx-auto hover:border-blue-200 hover:shadow-md",
             isCollected && "border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 scale-[0.98]",
             !isLocked && "cursor-grab active:cursor-grabbing"
           )}
-          onClick={() => !isLocked && onToggleCollected(id)}
+          onClick={() => onToggleCollected(id)}
         >
           <div
             className={cn(
-              "flex h-6 w-6 items-center justify-center rounded-full border transition-colors duration-300",
+              "flex h-5 w-5 items-center justify-center rounded-full border transition-colors duration-300",
               isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300"
             )}
           >
-            {isCollected && <Check className="h-4 w-4 text-white animate-scale-in" />}
+            {isCollected && <Check className="h-3 w-3 text-white animate-scale-in" />}
           </div>
           <span
             className={cn(
-              "flex-1 text-lg font-medium transition-all duration-300",
+              "flex-1 text-base font-medium transition-all duration-300",
               isCollected ? "text-gray-600" : "text-gray-800"
             )}
           >

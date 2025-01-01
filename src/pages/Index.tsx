@@ -10,7 +10,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100">
       <FloatingCircles />
-      <div className="mx-auto max-w-2xl relative z-10">
+      <div className="mx-auto max-w-7xl relative z-10">
         <div className="flex justify-between items-center p-4 md:p-8">
           <Button 
             variant="ghost" 
