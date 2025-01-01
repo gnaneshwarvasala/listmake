@@ -53,11 +53,14 @@ export const generatePDF = (
   }
 
   // Add watermark to all pages
-  const pages = pdf.internal.getNumberOfPages();
   const watermarkText = "Lovable Lists";
   pdf.setFontSize(40);
   pdf.setTextColor(230, 230, 230);
-  for (let i = 1; i <= pages; i++) {
+  
+  // Get the correct number of pages using internal.pages
+  const pageCount = pdf.internal.pages.length - 1;
+  
+  for (let i = 1; i <= pageCount; i++) {
     pdf.setPage(i);
     pdf.text(
       watermarkText,
