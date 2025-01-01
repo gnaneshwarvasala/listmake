@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { toast } from "sonner";
-import { Share2, Download, DollarSign } from "lucide-react";
+import confetti from 'canvas-confetti';
 import { CategoryType } from "./CategorySelector";
 import ProgressBar from "./Progress";
-import confetti from 'canvas-confetti';
 import ListHeader from "./ListHeader";
 import ListItemBox from "./ListItemBox";
 import ListActions from "./ListActions";
-import { Button } from "./ui/button";
+import ShareOptions from "./ShareOptions";
+import CurrencySelector from "./CurrencySelector";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-
-interface Item {
-  id: string;
-  text: string;
-  isCollected: boolean;
-  price?: number;
-}
+import { generatePDF } from "@/utils/pdfGenerator";
+import { Item } from "@/types/item";
 
 const getBackgroundClass = (category: CategoryType) => {
   const backgrounds = {
@@ -42,6 +35,7 @@ const ShoppingList = () => {
   const [category, setCategory] = useState<CategoryType>("grocery");
   const [customTitle, setCustomTitle] = useState("");
   const [showPricing, setShowPricing] = useState(false);
+  const [currencySymbol, setCurrencySymbol] = useState("$");
 
   useEffect(() => {
     const completedCount = items.filter(item => item.isCollected).length;
@@ -136,6 +130,10 @@ const ShoppingList = () => {
   };
 
   const updateItemPrice = (id: string, price: number) => {
+    if (isLocked) {
+      toast.error("List is locked. Unlock to update prices.");
+      return;
+    }
     setItems(
       items.map((item) =>
         item.id === id ? { ...item, price } : item
@@ -152,38 +150,33 @@ const ShoppingList = () => {
     return items.reduce((total, item) => total + (item.price || 0), 0);
   };
 
-  const shareList = async () => {
+  const handleShare = async (method: string) => {
     const listText = items
-      .map((item, index) => `${index + 1}. ${item.text}${item.price ? ` - $${item.price}` : ''}`)
+      .map((item, index) => `${index + 1}. ${item.text}${item.price ? ` - ${currencySymbol}${item.price}` : ''}`)
       .join('\n');
     
     try {
-      await navigator.share({
-        title: customTitle || `${category.charAt(0).toUpperCase() + category.slice(1)} List`,
-        text: listText,
-      });
-      toast.success("List shared successfully!");
+      if (method === "email") {
+        window.location.href = `mailto:?subject=${encodeURIComponent(customTitle || `${category} List`)}&body=${encodeURIComponent(listText)}`;
+      } else if (method === "message") {
+        if (navigator.share) {
+          await navigator.share({
+            title: customTitle || `${category.charAt(0).toUpperCase() + category.slice(1)} List`,
+            text: listText,
+          });
+        } else {
+          toast.error("Sharing not supported on this device");
+        }
+      }
     } catch (error) {
       toast.error("Couldn't share the list. Try exporting as PDF instead.");
     }
   };
 
-  const exportToPDF = async () => {
-    const element = document.getElementById('shopping-list');
-    if (!element) return;
-
+  const exportToPDF = () => {
     try {
-      const canvas = await html2canvas(element);
-      const pdf = new jsPDF();
-      
-      const imgData = canvas.toDataURL('image/png');
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      const pdf = generatePDF(items, customTitle, category, showPricing, currencySymbol);
       pdf.save(`${customTitle || category}-list.pdf`);
-      
       toast.success("PDF exported successfully!");
     } catch (error) {
       toast.error("Couldn't export PDF. Please try again.");
@@ -205,34 +198,24 @@ const ShoppingList = () => {
         />
         
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <Switch
-              checked={showPricing}
-              onCheckedChange={setShowPricing}
-              id="pricing-toggle"
-            />
-            <Label htmlFor="pricing-toggle">Show Pricing</Label>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={showPricing}
+                onCheckedChange={setShowPricing}
+                id="pricing-toggle"
+              />
+              <Label htmlFor="pricing-toggle">Show Pricing</Label>
+            </div>
+            {showPricing && (
+              <CurrencySelector
+                value={currencySymbol}
+                onChange={setCurrencySymbol}
+                disabled={isLocked}
+              />
+            )}
           </div>
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={shareList}
-              className="flex items-center gap-2"
-            >
-              <Share2 className="h-4 w-4" />
-              Share
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={exportToPDF}
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Export PDF
-            </Button>
-          </div>
+          <ShareOptions onShare={handleShare} onExportPDF={exportToPDF} />
         </div>
         
         <ProgressBar total={items.length} completed={completedItems} />
@@ -266,6 +249,7 @@ const ShoppingList = () => {
                     showPricing={showPricing}
                     price={item.price}
                     onUpdatePrice={updateItemPrice}
+                    currencySymbol={currencySymbol}
                   />
                 ))}
                 {provided.placeholder}
@@ -278,7 +262,9 @@ const ShoppingList = () => {
           <div className="mt-4 p-4 bg-white/50 backdrop-blur-sm rounded-lg shadow-sm">
             <div className="flex justify-between items-center">
               <span className="font-semibold">Total:</span>
-              <span className="text-lg font-bold">${getTotalPrice().toFixed(2)}</span>
+              <span className="text-lg font-bold">
+                {currencySymbol}{getTotalPrice().toFixed(2)}
+              </span>
             </div>
           </div>
         )}

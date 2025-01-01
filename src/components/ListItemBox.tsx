@@ -1,6 +1,6 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Check, Trash2, DollarSign } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ interface ListItemBoxProps {
   isLocked: boolean;
   showPricing?: boolean;
   price?: number;
+  currencySymbol?: string;
   onToggleCollected: (id: string) => void;
   onDelete: (id: string) => void;
   onUpdatePrice?: (id: string, price: number) => void;
@@ -26,6 +27,7 @@ const ListItemBox = ({
   isLocked,
   showPricing,
   price,
+  currencySymbol = "$",
   onToggleCollected,
   onDelete,
   onUpdatePrice
@@ -71,7 +73,7 @@ const ListItemBox = ({
             
             {showPricing && (
               <div className="flex items-center gap-1">
-                <DollarSign className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-400">{currencySymbol}</span>
                 <Input
                   type="number"
                   value={price || ""}
