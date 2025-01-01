@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { toast } from "sonner";
+import { Share2, Download, DollarSign } from "lucide-react";
 import { CategoryType } from "./CategorySelector";
 import ProgressBar from "./Progress";
 import confetti from 'canvas-confetti';
 import ListHeader from "./ListHeader";
 import ListItemBox from "./ListItemBox";
 import ListActions from "./ListActions";
+import { Button } from "./ui/button";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 interface Item {
   id: string;
   text: string;
   isCollected: boolean;
+  price?: number;
 }
 
 const getBackgroundClass = (category: CategoryType) => {
@@ -34,6 +41,7 @@ const ShoppingList = () => {
   const [isLocked, setIsLocked] = useState(false);
   const [category, setCategory] = useState<CategoryType>("grocery");
   const [customTitle, setCustomTitle] = useState("");
+  const [showPricing, setShowPricing] = useState(false);
 
   useEffect(() => {
     const completedCount = items.filter(item => item.isCollected).length;
@@ -91,6 +99,7 @@ const ShoppingList = () => {
       id: Date.now().toString(),
       text: newItemText.trim(),
       isCollected: false,
+      price: showPricing ? 0 : undefined,
     };
     
     setItems([...items, newItem]);
@@ -126,9 +135,59 @@ const ShoppingList = () => {
     toast.success(`Deleted "${itemToDelete?.text}"`);
   };
 
+  const updateItemPrice = (id: string, price: number) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, price } : item
+      )
+    );
+  };
+
   const toggleLock = () => {
     setIsLocked(!isLocked);
     toast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`);
+  };
+
+  const getTotalPrice = () => {
+    return items.reduce((total, item) => total + (item.price || 0), 0);
+  };
+
+  const shareList = async () => {
+    const listText = items
+      .map((item, index) => `${index + 1}. ${item.text}${item.price ? ` - $${item.price}` : ''}`)
+      .join('\n');
+    
+    try {
+      await navigator.share({
+        title: customTitle || `${category.charAt(0).toUpperCase() + category.slice(1)} List`,
+        text: listText,
+      });
+      toast.success("List shared successfully!");
+    } catch (error) {
+      toast.error("Couldn't share the list. Try exporting as PDF instead.");
+    }
+  };
+
+  const exportToPDF = async () => {
+    const element = document.getElementById('shopping-list');
+    if (!element) return;
+
+    try {
+      const canvas = await html2canvas(element);
+      const pdf = new jsPDF();
+      
+      const imgData = canvas.toDataURL('image/png');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${customTitle || category}-list.pdf`);
+      
+      toast.success("PDF exported successfully!");
+    } catch (error) {
+      toast.error("Couldn't export PDF. Please try again.");
+    }
   };
 
   const completedItems = items.filter(item => item.isCollected).length;
@@ -144,6 +203,37 @@ const ShoppingList = () => {
           customTitle={customTitle}
           onCustomTitleChange={setCustomTitle}
         />
+        
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={showPricing}
+              onCheckedChange={setShowPricing}
+              id="pricing-toggle"
+            />
+            <Label htmlFor="pricing-toggle">Show Pricing</Label>
+          </div>
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={shareList}
+              className="flex items-center gap-2"
+            >
+              <Share2 className="h-4 w-4" />
+              Share
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={exportToPDF}
+              className="flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Export PDF
+            </Button>
+          </div>
+        </div>
         
         <ProgressBar total={items.length} completed={completedItems} />
         
@@ -161,6 +251,7 @@ const ShoppingList = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className="space-y-3"
+                id="shopping-list"
               >
                 {items.map((item, index) => (
                   <ListItemBox
@@ -172,6 +263,9 @@ const ShoppingList = () => {
                     onToggleCollected={toggleCollected}
                     onDelete={deleteItem}
                     isLocked={isLocked}
+                    showPricing={showPricing}
+                    price={item.price}
+                    onUpdatePrice={updateItemPrice}
                   />
                 ))}
                 {provided.placeholder}
@@ -179,6 +273,15 @@ const ShoppingList = () => {
             )}
           </Droppable>
         </DragDropContext>
+
+        {showPricing && items.length > 0 && (
+          <div className="mt-4 p-4 bg-white/50 backdrop-blur-sm rounded-lg shadow-sm">
+            <div className="flex justify-between items-center">
+              <span className="font-semibold">Total:</span>
+              <span className="text-lg font-bold">${getTotalPrice().toFixed(2)}</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
