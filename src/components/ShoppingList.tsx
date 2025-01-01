@@ -43,14 +43,22 @@ const ShoppingList = () => {
       triggerCelebration();
       toast.success("Congratulations! You completed the list! 🎉", {
         duration: 5000,
+        className: "celebrate",
       });
     }
   }, [items]);
 
   const triggerCelebration = () => {
-    const duration = 3 * 1000;
+    const duration = 5 * 1000;
     const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    const defaults = { 
+      startVelocity: 30, 
+      spread: 360, 
+      ticks: 60, 
+      zIndex: 0,
+      shapes: ['square', 'circle'],
+      colors: ['#9b87f5', '#1EAEDB', '#7E69AB', '#33C3F0']
+    };
 
     function randomInRange(min: number, max: number) {
       return Math.random() * (max - min) + min;
