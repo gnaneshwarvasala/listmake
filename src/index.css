@@ -74,12 +74,12 @@
 
 /* Toast customization */
 .sonner-toast {
-  @apply font-inter !important;
-  animation: toast-slide-in-right 0.3s ease-out !important;
+  @apply font-inter;
+  animation: toast-slide-in-right 0.3s ease-out;
 }
 
 .sonner-toast[data-visible="false"] {
-  animation: toast-slide-out-right 0.3s ease-out !important;
+  animation: toast-slide-out-right 0.3s ease-out;
 }
 
 @keyframes toast-slide-in-right {
@@ -99,6 +99,6 @@
   }
   
   .sonner-toast {
-    @apply max-w-[90vw] !important;
+    @apply max-w-[90vw];
   }
 }

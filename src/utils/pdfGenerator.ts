@@ -64,8 +64,8 @@ export const generatePDF = (
   }
 
   // Add watermark to all pages
-  const pages = pdf.internal.getNumberOfPages();
-  for (let i = 1; i <= pages; i++) {
+  const pageCount = pdf.internal.pages.length;
+  for (let i = 1; i <= pageCount; i++) {
     pdf.setPage(i);
     pdf.setFontSize(40);
     pdf.setTextColor(230, 230, 230);
