@@ -11,26 +11,34 @@ export const generatePDF = (
 ) => {
   const pdf = new jsPDF();
   const pageWidth = pdf.internal.pageSize.getWidth();
+  const margin = 20;
+  let yPosition = margin;
   
-  // Add website name as header
+  // Add header
   pdf.setFontSize(24);
-  pdf.setTextColor(128, 0, 128); // Purple to match theme
-  pdf.text("Lovable Lists", pageWidth / 2, 20, { align: "center" });
+  pdf.setTextColor(128, 0, 128);
+  pdf.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
   
-  // Add title and category
+  // Add title
+  yPosition += 25;
   pdf.setFontSize(18);
   pdf.setTextColor(0, 0, 0);
   pdf.text(
     `${title || category.charAt(0).toUpperCase() + category.slice(1)} List`,
     pageWidth / 2,
-    40,
+    yPosition,
     { align: "center" }
   );
 
   // Add items
+  yPosition += 25;
   pdf.setFontSize(12);
   items.forEach((item, index) => {
-    const yPosition = 60 + (index * 10);
+    if (yPosition > pdf.internal.pageSize.getHeight() - margin) {
+      pdf.addPage();
+      yPosition = margin;
+    }
+    
     const itemText = `${index + 1}. ${item.text}${
       item.isCollected ? " ✓" : ""
     }${
@@ -38,32 +46,31 @@ export const generatePDF = (
         ? ` - ${currencySymbol}${item.price.toFixed(2)}`
         : ""
     }`;
-    pdf.text(itemText, 20, yPosition);
+    
+    pdf.text(itemText, margin, yPosition);
+    yPosition += 10;
   });
 
   // Add total if pricing is enabled
   if (showPricing) {
     const total = items.reduce((sum, item) => sum + (item.price || 0), 0);
+    yPosition += 10;
     pdf.text(
       `Total: ${currencySymbol}${total.toFixed(2)}`,
-      pageWidth - 40,
-      60 + (items.length * 10),
+      pageWidth - margin,
+      yPosition,
       { align: "right" }
     );
   }
 
   // Add watermark to all pages
-  const watermarkText = "Lovable Lists";
-  pdf.setFontSize(40);
-  pdf.setTextColor(230, 230, 230);
-  
-  // Get the correct number of pages using internal.pages
-  const pageCount = pdf.internal.pages.length - 1;
-  
-  for (let i = 1; i <= pageCount; i++) {
+  const pages = pdf.internal.getNumberOfPages();
+  for (let i = 1; i <= pages; i++) {
     pdf.setPage(i);
+    pdf.setFontSize(40);
+    pdf.setTextColor(230, 230, 230);
     pdf.text(
-      watermarkText,
+      "Lovable Lists",
       pageWidth / 2,
       pdf.internal.pageSize.getHeight() / 2,
       {

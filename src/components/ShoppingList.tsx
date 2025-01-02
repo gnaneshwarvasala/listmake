@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { toast } from "sonner";
 import confetti from 'canvas-confetti';
 import { CategoryType } from "./CategorySelector";
 import ProgressBar from "./Progress";
 import ListHeader from "./ListHeader";
 import ListItemBox from "./ListItemBox";
 import ListActions from "./ListActions";
-import ShareOptions from "./ShareOptions";
-import CurrencySelector from "./CurrencySelector";
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
+import ListControls from "./ListControls";
 import { generatePDF } from "@/utils/pdfGenerator";
+import { showToast } from "@/utils/toastConfig";
 import { Item } from "@/types/item";
 
 const getBackgroundClass = (category: CategoryType) => {
@@ -41,10 +38,7 @@ const ShoppingList = () => {
     const completedCount = items.filter(item => item.isCollected).length;
     if (completedCount === items.length && items.length > 0) {
       triggerCelebration();
-      toast.success("Congratulations! You completed the list! 🎉", {
-        duration: 5000,
-        className: "celebrate",
-      });
+      showToast.success("Congratulations! You completed the list! 🎉");
     }
   }, [items]);
 
@@ -56,44 +50,31 @@ const ShoppingList = () => {
       spread: 360, 
       ticks: 60, 
       zIndex: 0,
-      shapes: ['square' as const, 'circle' as const],
+      shapes: ['square', 'circle'],
       colors: ['#9b87f5', '#1EAEDB', '#7E69AB', '#33C3F0']
     };
 
-    function randomInRange(min: number, max: number) {
-      return Math.random() * (max - min) + min;
-    }
-
-    const interval = setInterval(function() {
+    const interval = setInterval(() => {
       const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
-
+      if (timeLeft <= 0) return clearInterval(interval);
+      
       const particleCount = 50 * (timeLeft / duration);
-
       confetti({
         ...defaults,
         particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-      });
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+        origin: { x: Math.random(), y: Math.random() - 0.2 }
       });
     }, 250);
   };
 
   const addItem = () => {
     if (isLocked) {
-      toast.error("List is locked. Unlock to add items.");
+      showToast.error("List is locked. Unlock to add items.");
       return;
     }
     
     if (!newItemText.trim()) {
-      toast.error("Please enter an item");
+      showToast.error("Please enter an item");
       return;
     }
     
@@ -106,7 +87,7 @@ const ShoppingList = () => {
     
     setItems([...items, newItem]);
     setNewItemText("");
-    toast.success(`Added "${newItemText}" to your list`);
+    showToast.success(`Added "${newItemText}" to your list`);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -115,7 +96,6 @@ const ShoppingList = () => {
     const newItems = Array.from(items);
     const [reorderedItem] = newItems.splice(result.source.index, 1);
     newItems.splice(result.destination.index, 0, reorderedItem);
-
     setItems(newItems);
   };
 
@@ -129,17 +109,17 @@ const ShoppingList = () => {
 
   const deleteItem = (id: string) => {
     if (isLocked) {
-      toast.error("List is locked. Unlock to delete items.");
+      showToast.error("List is locked. Unlock to delete items.");
       return;
     }
     const itemToDelete = items.find(item => item.id === id);
     setItems(items.filter(item => item.id !== id));
-    toast.success(`Deleted "${itemToDelete?.text}"`);
+    showToast.success(`Deleted "${itemToDelete?.text}"`);
   };
 
   const updateItemPrice = (id: string, price: number) => {
     if (isLocked) {
-      toast.error("List is locked. Unlock to update prices.");
+      showToast.error("List is locked. Unlock to update prices.");
       return;
     }
     setItems(
@@ -151,11 +131,7 @@ const ShoppingList = () => {
 
   const toggleLock = () => {
     setIsLocked(!isLocked);
-    toast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`);
-  };
-
-  const getTotalPrice = () => {
-    return items.reduce((total, item) => total + (item.price || 0), 0);
+    showToast.info(`List ${!isLocked ? 'locked' : 'unlocked'}`);
   };
 
   const handleShare = async (method: string) => {
@@ -173,11 +149,11 @@ const ShoppingList = () => {
             text: listText,
           });
         } else {
-          toast.error("Sharing not supported on this device");
+          showToast.error("Sharing not supported on this device");
         }
       }
     } catch (error) {
-      toast.error("Couldn't share the list. Try exporting as PDF instead.");
+      showToast.error("Couldn't share the list. Try exporting as PDF instead.");
     }
   };
 
@@ -185,9 +161,9 @@ const ShoppingList = () => {
     try {
       const pdf = generatePDF(items, customTitle, category, showPricing, currencySymbol);
       pdf.save(`${customTitle || category}-list.pdf`);
-      toast.success("PDF exported successfully!");
+      showToast.success("PDF exported successfully!");
     } catch (error) {
-      toast.error("Couldn't export PDF. Please try again.");
+      showToast.error("Couldn't export PDF. Please try again.");
     }
   };
 
@@ -205,26 +181,15 @@ const ShoppingList = () => {
           onCustomTitleChange={setCustomTitle}
         />
         
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Switch
-                checked={showPricing}
-                onCheckedChange={setShowPricing}
-                id="pricing-toggle"
-              />
-              <Label htmlFor="pricing-toggle">Show Pricing</Label>
-            </div>
-            {showPricing && (
-              <CurrencySelector
-                value={currencySymbol}
-                onChange={setCurrencySymbol}
-                disabled={isLocked}
-              />
-            )}
-          </div>
-          <ShareOptions onShare={handleShare} onExportPDF={exportToPDF} />
-        </div>
+        <ListControls
+          showPricing={showPricing}
+          setShowPricing={setShowPricing}
+          currencySymbol={currencySymbol}
+          setCurrencySymbol={setCurrencySymbol}
+          isLocked={isLocked}
+          onShare={handleShare}
+          onExportPDF={exportToPDF}
+        />
         
         <ProgressBar total={items.length} completed={completedItems} />
         
@@ -242,7 +207,6 @@ const ShoppingList = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className="space-y-3"
-                id="shopping-list"
               >
                 {items.map((item, index) => (
                   <ListItemBox
@@ -271,7 +235,7 @@ const ShoppingList = () => {
             <div className="flex justify-between items-center">
               <span className="font-semibold">Total:</span>
               <span className="text-lg font-bold">
-                {currencySymbol}{getTotalPrice().toFixed(2)}
+                {currencySymbol}{items.reduce((total, item) => total + (item.price || 0), 0).toFixed(2)}
               </span>
             </div>
           </div>

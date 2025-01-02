@@ -40,39 +40,44 @@ const ListItemBox = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            "group relative flex items-center gap-2 rounded-lg border p-3 shadow-sm transition-all duration-300",
+            "group relative flex flex-col sm:flex-row items-start sm:items-center gap-2 rounded-lg border p-3 shadow-sm transition-all duration-300",
             "max-w-xl mx-auto hover:border-blue-200 hover:shadow-md",
             isCollected && "border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 scale-[0.98]",
             !isLocked && "cursor-grab active:cursor-grabbing"
           )}
         >
-          <div
-            className={cn(
-              "flex h-5 w-5 items-center justify-center rounded-full border transition-colors duration-300",
-              isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300"
-            )}
-            onClick={() => onToggleCollected(id)}
-          >
-            {isCollected && <Check className="h-3 w-3 text-white animate-scale-in" />}
+          <div className="flex items-center gap-2 w-full">
+            <div
+              className={cn(
+                "flex h-5 w-5 items-center justify-center rounded-full border transition-colors duration-300",
+                isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300",
+                "cursor-pointer flex-shrink-0"
+              )}
+              onClick={() => onToggleCollected(id)}
+            >
+              {isCollected && <Check className="h-3 w-3 text-white animate-scale-in" />}
+            </div>
+            
+            <div className="flex-1 min-w-0">
+              <span
+                className={cn(
+                  "block text-base font-medium transition-all duration-300 truncate",
+                  isCollected ? "text-gray-600" : "text-gray-800"
+                )}
+              >
+                {text}
+                {isCollected && (
+                  <span className="ml-2 text-sm text-green-600 italic">
+                    Completed
+                  </span>
+                )}
+              </span>
+            </div>
           </div>
           
-          <div className="flex-1 flex items-center gap-2">
-            <span
-              className={cn(
-                "flex-1 text-base font-medium transition-all duration-300",
-                isCollected ? "text-gray-600" : "text-gray-800"
-              )}
-            >
-              {text}
-              {isCollected && (
-                <span className="ml-2 text-sm text-green-600 italic">
-                  Completed
-                </span>
-              )}
-            </span>
-            
+          <div className="flex items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
             {showPricing && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 flex-1 sm:flex-initial">
                 <span className="text-gray-400">{currencySymbol}</span>
                 <Input
                   type="number"
@@ -86,21 +91,21 @@ const ListItemBox = ({
                 />
               </div>
             )}
-          </div>
 
-          {!isLocked && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(id);
-              }}
-            >
-              <Trash2 className="h-4 w-4 text-red-500" />
-            </Button>
-          )}
+            {!isLocked && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(id);
+                }}
+              >
+                <Trash2 className="h-4 w-4 text-red-500" />
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </Draggable>
