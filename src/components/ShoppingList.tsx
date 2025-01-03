@@ -11,6 +11,8 @@ import { generatePDF } from "@/utils/pdfGenerator";
 import { showToast } from "@/utils/toastConfig";
 import { Item } from "@/types/item";
 
+const MAX_LISTS = 100;
+
 const getBackgroundClass = (category: CategoryType) => {
   const backgrounds = {
     grocery: "from-green-100/80 via-emerald-50/80 to-teal-50/80",
@@ -75,6 +77,11 @@ const ShoppingList = () => {
     
     if (!newItemText.trim()) {
       showToast.error("Please enter an item");
+      return;
+    }
+
+    if (items.length >= MAX_LISTS) {
+      showToast.error(`You've reached the maximum limit of ${MAX_LISTS} items`);
       return;
     }
     

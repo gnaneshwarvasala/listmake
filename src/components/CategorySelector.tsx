@@ -23,14 +23,14 @@ interface CategorySelectorProps {
 }
 
 const categories = [
-  { value: "grocery", label: "Grocery List" },
-  { value: "meal", label: "Meal Planner" },
-  { value: "budget", label: "Budget List" },
-  { value: "travel", label: "Travel Places" },
-  { value: "event", label: "Event Planning" },
-  { value: "bucket", label: "Bucket List" },
-  { value: "party", label: "Party Planning" },
-  { value: "custom", label: "Custom List" },
+  { value: "grocery", label: "Grocery List", beta: false },
+  { value: "meal", label: "Meal Planner", beta: true },
+  { value: "budget", label: "Budget List", beta: true },
+  { value: "travel", label: "Travel Places", beta: true },
+  { value: "event", label: "Event Planning", beta: true },
+  { value: "bucket", label: "Bucket List", beta: true },
+  { value: "party", label: "Party Planning", beta: true },
+  { value: "custom", label: "Custom List", beta: false },
 ];
 
 const CategorySelector = ({ category, onCategoryChange }: CategorySelectorProps) => {
@@ -41,16 +41,28 @@ const CategorySelector = ({ category, onCategoryChange }: CategorySelectorProps)
         onValueChange={(value) => onCategoryChange(value as CategoryType)}
       >
         <SelectTrigger className="w-full bg-white/50 backdrop-blur-sm border-purple-200 hover:border-purple-300 transition-colors">
-          <SelectValue placeholder="Select a category" />
+          <SelectValue placeholder="Select a category">
+            {categories.find(cat => cat.value === category)?.label}
+            {categories.find(cat => cat.value === category)?.beta && (
+              <span className="ml-2 text-xs px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full">
+                Beta
+              </span>
+            )}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent className="bg-white/80 backdrop-blur-sm">
           {categories.map((cat) => (
             <SelectItem 
               key={cat.value} 
               value={cat.value}
-              className="hover:bg-purple-50 cursor-pointer"
+              className="hover:bg-purple-50 cursor-pointer flex items-center justify-between"
             >
               {cat.label}
+              {cat.beta && (
+                <span className="text-xs px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full">
+                  Beta
+                </span>
+              )}
             </SelectItem>
           ))}
         </SelectContent>

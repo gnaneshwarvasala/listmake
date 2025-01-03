@@ -32,18 +32,24 @@ const ListItem = ({
           {...provided.dragHandleProps}
           className={cn(
             "group relative flex items-center gap-2 rounded-lg border p-4 shadow-sm transition-all duration-300",
-            "max-w-xl mx-auto hover:border-blue-200 hover:shadow-md",
+            "max-w-xl mx-auto hover:border-blue-200 hover:shadow-md cursor-pointer",
             isCollected && "border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 scale-[0.98]",
-            !isLocked && "cursor-grab active:cursor-grabbing"
+            !isLocked && "active:cursor-grabbing"
           )}
+          onClick={() => onToggleCollected(id)}
+          role="button"
+          tabIndex={0}
+          onKeyPress={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              onToggleCollected(id);
+            }
+          }}
         >
           <div
             className={cn(
               "flex h-6 w-6 items-center justify-center rounded-full border transition-colors duration-300",
-              isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300 hover:border-gray-400",
-              "cursor-pointer"
+              isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300 hover:border-gray-400"
             )}
-            onClick={() => onToggleCollected(id)}
           >
             {isCollected && <Check className="h-4 w-4 text-white animate-scale-in" />}
           </div>

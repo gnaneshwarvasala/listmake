@@ -11,32 +11,48 @@ export const generatePDF = (
 ) => {
   const pdf = new jsPDF();
   const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
   const margin = 20;
   let yPosition = margin;
   
-  // Add header
-  pdf.setFontSize(24);
-  pdf.setTextColor(128, 0, 128);
-  pdf.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
-  
-  // Add title
-  yPosition += 25;
-  pdf.setFontSize(18);
-  pdf.setTextColor(0, 0, 0);
-  pdf.text(
-    `${title || category.charAt(0).toUpperCase() + category.slice(1)} List`,
-    pageWidth / 2,
-    yPosition,
-    { align: "center" }
-  );
+  const addHeader = (pageNum?: number) => {
+    yPosition = margin;
+    pdf.setFontSize(24);
+    pdf.setTextColor(128, 0, 128);
+    pdf.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
+    
+    if (pageNum) {
+      pdf.setFontSize(10);
+      pdf.setTextColor(128, 128, 128);
+      pdf.text(`Page ${pageNum}`, pageWidth - margin, pageHeight - margin, { align: "right" });
+    }
+    
+    yPosition += 25;
+    pdf.setFontSize(18);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(
+      `${title || category.charAt(0).toUpperCase() + category.slice(1)} List`,
+      pageWidth / 2,
+      yPosition,
+      { align: "center" }
+    );
+    
+    yPosition += 25;
+  };
 
-  // Add items
-  yPosition += 25;
+  // Add first page header
+  addHeader(1);
+  
+  // Set consistent font for items
   pdf.setFontSize(12);
+  let pageNum = 1;
+
   items.forEach((item, index) => {
-    if (yPosition > pdf.internal.pageSize.getHeight() - margin) {
+    // Check if we need a new page
+    if (yPosition > pageHeight - margin * 2) {
       pdf.addPage();
-      yPosition = margin;
+      pageNum++;
+      addHeader(pageNum);
     }
     
     const itemText = `${index + 1}. ${item.text}${
@@ -47,36 +63,37 @@ export const generatePDF = (
         : ""
     }`;
     
+    // Draw a light gray background for completed items
+    if (item.isCollected) {
+      pdf.setFillColor(245, 245, 245);
+      pdf.rect(margin - 5, yPosition - 5, pageWidth - (margin * 2) + 10, 10, "F");
+    }
+    
+    pdf.setTextColor(item.isCollected ? 128 : 0, item.isCollected ? 128 : 0, item.isCollected ? 128 : 0);
     pdf.text(itemText, margin, yPosition);
-    yPosition += 10;
+    yPosition += 15;
   });
 
   // Add total if pricing is enabled
-  if (showPricing) {
+  if (showPricing && items.length > 0) {
+    // Check if we need a new page for the total
+    if (yPosition > pageHeight - margin * 3) {
+      pdf.addPage();
+      pageNum++;
+      addHeader(pageNum);
+    }
+    
     const total = items.reduce((sum, item) => sum + (item.price || 0), 0);
     yPosition += 10;
+    pdf.setDrawColor(200, 200, 200);
+    pdf.line(margin, yPosition - 5, pageWidth - margin, yPosition - 5);
+    pdf.setFontSize(14);
+    pdf.setTextColor(0, 0, 0);
     pdf.text(
       `Total: ${currencySymbol}${total.toFixed(2)}`,
       pageWidth - margin,
-      yPosition,
+      yPosition + 10,
       { align: "right" }
-    );
-  }
-
-  // Add watermark to all pages
-  const pageCount = pdf.internal.pages.length;
-  for (let i = 1; i <= pageCount; i++) {
-    pdf.setPage(i);
-    pdf.setFontSize(40);
-    pdf.setTextColor(230, 230, 230);
-    pdf.text(
-      "Lovable Lists",
-      pageWidth / 2,
-      pdf.internal.pageSize.getHeight() / 2,
-      {
-        align: "center",
-        angle: 45
-      }
     );
   }
 

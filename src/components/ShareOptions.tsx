@@ -1,4 +1,4 @@
-import { Share2, Download, Mail, Link, MessageSquare } from "lucide-react";
+import { Share2, Download, Mail, Link2, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,24 +30,24 @@ const ShareOptions = ({ onShare, onExportPDF }: ShareOptionsProps) => {
           <Button
             variant="outline"
             size="sm"
-            className="flex items-center gap-2"
+            className="flex items-center gap-1.5 px-2.5 h-8"
           >
-            <Share2 className="h-4 w-4" />
-            Share
+            <Share2 className="h-3.5 w-3.5" />
+            <span className="text-sm">Share</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem onClick={() => onShare("email")}>
-            <Mail className="h-4 w-4 mr-2" />
-            Email
+            <Mail className="h-3.5 w-3.5 mr-2" />
+            <span className="text-sm">Email</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onShare("message")}>
-            <MessageSquare className="h-4 w-4 mr-2" />
-            Message
+            <MessageSquare className="h-3.5 w-3.5 mr-2" />
+            <span className="text-sm">Message</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleCopyLink}>
-            <Link className="h-4 w-4 mr-2" />
-            Copy Link
+            <Link2 className="h-3.5 w-3.5 mr-2" />
+            <span className="text-sm">Copy Link</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -56,10 +56,10 @@ const ShareOptions = ({ onShare, onExportPDF }: ShareOptionsProps) => {
         variant="outline"
         size="sm"
         onClick={onExportPDF}
-        className="flex items-center gap-2"
+        className="flex items-center gap-1.5 px-2.5 h-8"
       >
-        <Download className="h-4 w-4" />
-        Export PDF
+        <Download className="h-3.5 w-3.5" />
+        <span className="text-sm">Export PDF</span>
       </Button>
     </div>
   );
