@@ -2,30 +2,16 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import confetti from 'canvas-confetti';
 import { CategoryType } from "./CategorySelector";
+import { validateListCreation } from "@/utils/listValidation";
+import { isListTypeEnabled } from "@/utils/listTypes";
 import ProgressBar from "./Progress";
 import ListHeader from "./ListHeader";
-import ListItemBox from "./ListItemBox";
+import EnhancedListItem from "./EnhancedListItem";
 import ListActions from "./ListActions";
 import ListControls from "./ListControls";
 import { generatePDF } from "@/utils/pdfGenerator";
 import { showToast } from "@/utils/toastConfig";
 import { Item } from "@/types/item";
-
-const MAX_LISTS = 100;
-
-const getBackgroundClass = (category: CategoryType) => {
-  const backgrounds = {
-    grocery: "from-green-100/80 via-emerald-50/80 to-teal-50/80",
-    travel: "from-blue-100/80 via-indigo-50/80 to-purple-50/80",
-    meal: "from-orange-100/80 via-amber-50/80 to-yellow-50/80",
-    budget: "from-emerald-100/80 via-teal-50/80 to-green-50/80",
-    event: "from-purple-100/80 via-fuchsia-50/80 to-pink-50/80",
-    bucket: "from-cyan-100/80 via-sky-50/80 to-blue-50/80",
-    party: "from-pink-100/80 via-rose-50/80 to-red-50/80",
-    custom: "from-violet-100/80 via-purple-50/80 to-indigo-50/80"
-  };
-  return backgrounds[category];
-};
 
 const ShoppingList = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -52,7 +38,7 @@ const ShoppingList = () => {
       spread: 360, 
       ticks: 60, 
       zIndex: 0,
-      shapes: ['square' as const, 'circle' as const],
+      shapes: ['square', 'circle'],
       colors: ['#9b87f5', '#1EAEDB', '#7E69AB', '#33C3F0']
     };
 
@@ -70,6 +56,11 @@ const ShoppingList = () => {
   };
 
   const addItem = () => {
+    if (!isListTypeEnabled(category)) {
+      showToast.error("This list type is currently unavailable");
+      return;
+    }
+
     if (isLocked) {
       showToast.error("List is locked. Unlock to add items.");
       return;
@@ -80,8 +71,7 @@ const ShoppingList = () => {
       return;
     }
 
-    if (items.length >= MAX_LISTS) {
-      showToast.error(`You've reached the maximum limit of ${MAX_LISTS} items`);
+    if (!validateListCreation(items.length)) {
       return;
     }
     
@@ -107,6 +97,11 @@ const ShoppingList = () => {
   };
 
   const toggleCollected = (id: string) => {
+    if (!isListTypeEnabled(category)) {
+      showToast.error("This list type is currently unavailable");
+      return;
+    }
+    
     setItems(
       items.map((item) =>
         item.id === id ? { ...item, isCollected: !item.isCollected } : item
@@ -142,6 +137,11 @@ const ShoppingList = () => {
   };
 
   const handleShare = async (method: string) => {
+    if (!isListTypeEnabled(category)) {
+      showToast.error("This list type is currently unavailable");
+      return;
+    }
+
     const listText = items
       .map((item, index) => `${index + 1}. ${item.text}${item.price ? ` - ${currencySymbol}${item.price}` : ''}`)
       .join('\n');
@@ -165,6 +165,11 @@ const ShoppingList = () => {
   };
 
   const exportToPDF = () => {
+    if (!isListTypeEnabled(category)) {
+      showToast.error("This list type is currently unavailable");
+      return;
+    }
+
     try {
       const pdf = generatePDF(items, customTitle, category, showPricing, currencySymbol);
       pdf.save(`${customTitle || category}-list.pdf`);
@@ -216,7 +221,7 @@ const ShoppingList = () => {
                 className="space-y-3"
               >
                 {items.map((item, index) => (
-                  <ListItemBox
+                  <EnhancedListItem
                     key={item.id}
                     id={item.id}
                     index={index}

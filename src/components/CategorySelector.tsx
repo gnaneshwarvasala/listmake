@@ -6,6 +6,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { isListTypeEnabled, getListTypeMessage } from "@/utils/listTypes";
 
 export type CategoryType = 
   | "grocery" 
@@ -51,20 +58,41 @@ const CategorySelector = ({ category, onCategoryChange }: CategorySelectorProps)
           </SelectValue>
         </SelectTrigger>
         <SelectContent className="bg-white/80 backdrop-blur-sm">
-          {categories.map((cat) => (
-            <SelectItem 
-              key={cat.value} 
-              value={cat.value}
-              className="hover:bg-purple-50 cursor-pointer flex items-center justify-between"
-            >
-              {cat.label}
-              {cat.beta && (
-                <span className="text-xs px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full">
-                  Beta
-                </span>
-              )}
-            </SelectItem>
-          ))}
+          {categories.map((cat) => {
+            const isEnabled = isListTypeEnabled(cat.value as CategoryType);
+            const message = getListTypeMessage(cat.value as CategoryType);
+            
+            return (
+              <TooltipProvider key={cat.value}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <SelectItem 
+                        value={cat.value}
+                        className={cn(
+                          "hover:bg-purple-50 cursor-pointer flex items-center justify-between",
+                          !isEnabled && "opacity-50 cursor-not-allowed"
+                        )}
+                        disabled={!isEnabled}
+                      >
+                        {cat.label}
+                        {cat.beta && (
+                          <span className="text-xs px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full">
+                            Beta
+                          </span>
+                        )}
+                      </SelectItem>
+                    </div>
+                  </TooltipTrigger>
+                  {!isEnabled && (
+                    <TooltipContent>
+                      <p>{message}</p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
+            );
+          })}
         </SelectContent>
       </Select>
     </div>

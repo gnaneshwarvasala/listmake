@@ -14,19 +14,22 @@ export const generatePDF = (
   const pageHeight = pdf.internal.pageSize.getHeight();
   const margin = 20;
   let yPosition = margin;
+  let pageNum = 1;
   
-  const addHeader = (pageNum?: number) => {
+  const addHeader = () => {
     yPosition = margin;
+    
+    // Add logo or title
     pdf.setFontSize(24);
     pdf.setTextColor(128, 0, 128);
     pdf.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
     
-    if (pageNum) {
-      pdf.setFontSize(10);
-      pdf.setTextColor(128, 128, 128);
-      pdf.text(`Page ${pageNum}`, pageWidth - margin, pageHeight - margin, { align: "right" });
-    }
+    // Add page number
+    pdf.setFontSize(10);
+    pdf.setTextColor(128, 128, 128);
+    pdf.text(`Page ${pageNum}`, pageWidth - margin, pageHeight - margin, { align: "right" });
     
+    // Add list title
     yPosition += 25;
     pdf.setFontSize(18);
     pdf.setTextColor(0, 0, 0);
@@ -37,22 +40,32 @@ export const generatePDF = (
       { align: "center" }
     );
     
+    // Add date
+    yPosition += 15;
+    pdf.setFontSize(10);
+    pdf.setTextColor(128, 128, 128);
+    pdf.text(
+      new Date().toLocaleDateString(),
+      pageWidth / 2,
+      yPosition,
+      { align: "center" }
+    );
+    
     yPosition += 25;
   };
 
   // Add first page header
-  addHeader(1);
+  addHeader();
   
   // Set consistent font for items
   pdf.setFontSize(12);
-  let pageNum = 1;
 
   items.forEach((item, index) => {
     // Check if we need a new page
     if (yPosition > pageHeight - margin * 2) {
       pdf.addPage();
       pageNum++;
-      addHeader(pageNum);
+      addHeader();
     }
     
     const itemText = `${index + 1}. ${item.text}${
@@ -80,7 +93,7 @@ export const generatePDF = (
     if (yPosition > pageHeight - margin * 3) {
       pdf.addPage();
       pageNum++;
-      addHeader(pageNum);
+      addHeader();
     }
     
     const total = items.reduce((sum, item) => sum + (item.price || 0), 0);
