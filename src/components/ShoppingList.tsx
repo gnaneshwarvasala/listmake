@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { CategoryType } from "./CategorySelector";
 import { validateListCreation } from "@/utils/listValidation";
 import { isListTypeEnabled } from "@/utils/listTypes";
+import { getBackgroundClass } from "@/utils/backgroundUtils";
 import ProgressBar from "./Progress";
 import ListHeader from "./ListHeader";
 import EnhancedListItem from "./EnhancedListItem";
@@ -38,7 +39,7 @@ const ShoppingList = () => {
       spread: 360, 
       ticks: 60, 
       zIndex: 0,
-      shapes: ['square', 'circle'],
+      shapes: ['square' as const, 'circle' as const],
       colors: ['#9b87f5', '#1EAEDB', '#7E69AB', '#33C3F0']
     };
 
