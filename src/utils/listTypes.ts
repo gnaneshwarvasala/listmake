@@ -7,5 +7,5 @@ export const isListTypeEnabled = (category: CategoryType): boolean => {
 
 export const getListTypeMessage = (category: CategoryType): string => {
   if (isListTypeEnabled(category)) return "";
-  return "This list type is currently unavailable";
+  return "This feature is under development and will be available soon.";
 };

@@ -53,7 +53,7 @@ const CategorySelector = ({ category, onCategoryChange }: CategorySelectorProps)
             {categories.find(cat => cat.value === category)?.label}
             {categories.find(cat => cat.value === category)?.beta && (
               <span className="ml-2 text-xs px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full">
-                Beta
+                Coming Soon
               </span>
             )}
           </SelectValue>
@@ -76,17 +76,19 @@ const CategorySelector = ({ category, onCategoryChange }: CategorySelectorProps)
                         )}
                         disabled={!isEnabled}
                       >
-                        {cat.label}
-                        {cat.beta && (
-                          <span className="text-xs px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full">
-                            Beta
-                          </span>
-                        )}
+                        <span className="flex items-center gap-2">
+                          {cat.label}
+                          {cat.beta && (
+                            <span className="text-xs px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full whitespace-nowrap">
+                              Coming Soon
+                            </span>
+                          )}
+                        </span>
                       </SelectItem>
                     </div>
                   </TooltipTrigger>
                   {!isEnabled && (
-                    <TooltipContent>
+                    <TooltipContent side="right" className="max-w-[200px]">
                       <p>{message}</p>
                     </TooltipContent>
                   )}
