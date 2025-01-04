@@ -20,11 +20,13 @@ export const generatePDF = (
   const watermarkText = "Lovable Lists";
   pdf.setTextColor(200, 200, 200); // Light gray
   pdf.setFontSize(60);
-  pdf.setGState(new pdf.GState({ opacity: 0.2 }));
-  pdf.save();
-  pdf.rotate(45, pageWidth/2, pageHeight/2);
-  pdf.text(watermarkText, pageWidth/2, pageHeight/2, { align: "center" });
-  pdf.restore();
+  pdf.setGState({ opacity: 0.2 });
+  
+  // Calculate center position and add watermark
+  const textWidth = pdf.getTextWidth(watermarkText);
+  const xCenter = (pageWidth - textWidth) / 2;
+  const yCenter = pageHeight / 2;
+  pdf.text(watermarkText, xCenter, yCenter);
   
   const addHeader = () => {
     yPosition = margin;
