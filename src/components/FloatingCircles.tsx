@@ -6,7 +6,7 @@ const FloatingCircles = () => {
       {[...Array(5)].map((_, i) => (
         <div
           key={i}
-          className={`absolute rounded-full mix-blend-multiply opacity-70 filter blur-xl animate-float-${i + 1}`}
+          className="absolute rounded-full mix-blend-multiply opacity-70 filter blur-xl"
           style={{
             background: [
               "radial-gradient(circle, rgba(192,132,252,0.8) 0%, rgba(192,132,252,0) 70%)",
