@@ -172,10 +172,11 @@ const ShoppingList = () => {
     }
 
     try {
-      const pdf = generatePDF(items, customTitle, category, showPricing, currencySymbol);
-      pdf.save(`${customTitle || category}-list.pdf`);
+      const doc = generatePDF(items, customTitle, category, showPricing, currencySymbol);
+      doc.save(`${customTitle || category}-list.pdf`);
       showToast.success("PDF exported successfully!");
     } catch (error) {
+      console.error("PDF Export Error:", error);
       showToast.error("Couldn't export PDF. Please try again.");
     }
   };

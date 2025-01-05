@@ -22,10 +22,12 @@ export default {
       }
     },
     extend: {
-      fontFamily: {
-        inter: ['Inter', 'sans-serif'],
-      },
       colors: {
+        'primary-dark': '#0077B6',
+        'primary': '#0096C7',
+        'primary-light': '#00B4D8',
+        'secondary': '#48CAEA',
+        'accent': '#90E0EF',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

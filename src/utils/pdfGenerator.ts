@@ -8,119 +8,100 @@ export const generatePDF = (
   category: CategoryType,
   showPricing: boolean,
   currencySymbol: string
-) => {
-  const pdf = new jsPDF();
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
+): jsPDF => {
+  // Initialize PDF
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4"
+  });
+
+  // Set up dimensions
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 20;
   let yPosition = margin;
-  let pageNum = 1;
-  
-  // Add watermark
-  const watermarkText = "Lovable Lists";
-  pdf.setTextColor(200, 200, 200);
-  pdf.setFontSize(60);
-  pdf.setGState({ opacity: 0.2 });
-  
-  // Calculate center position and add watermark
-  const textWidth = pdf.getTextWidth(watermarkText);
-  const xCenter = (pageWidth - textWidth) / 2;
-  const yCenter = pageHeight / 2;
-  pdf.text(watermarkText, xCenter, yCenter);
-  
-  const addHeader = () => {
-    yPosition = margin;
-    
-    // Reset text properties after watermark
-    pdf.setFontSize(24);
-    pdf.setTextColor(128, 0, 128); // Purple color for header
-    pdf.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
-    
-    // Add page number
-    pdf.setFontSize(10);
-    pdf.setTextColor(128, 128, 128);
-    pdf.text(`Page ${pageNum}`, pageWidth - margin, pageHeight - margin, { align: "right" });
-    
-    // Add list title
-    yPosition += 25;
-    pdf.setFontSize(18);
-    pdf.setTextColor(51, 51, 51);
-    pdf.text(
-      `${title || category.charAt(0).toUpperCase() + category.slice(1)} List`,
-      pageWidth / 2,
-      yPosition,
-      { align: "center" }
-    );
-    
-    // Add date
-    yPosition += 15;
-    pdf.setFontSize(10);
-    pdf.setTextColor(128, 128, 128);
-    pdf.text(
-      new Date().toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      }),
-      pageWidth / 2,
-      yPosition,
-      { align: "center" }
-    );
-    
-    yPosition += 25;
-  };
 
-  // Add first page header
-  addHeader();
-  
-  // Set consistent font for items
-  pdf.setFontSize(12);
-  pdf.setTextColor(51, 51, 51);
+  // Add header
+  doc.setFontSize(24);
+  doc.setTextColor(0, 119, 182); // Primary dark color
+  doc.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
+
+  // Add title
+  yPosition += 15;
+  doc.setFontSize(18);
+  doc.setTextColor(0, 150, 199); // Primary color
+  doc.text(
+    `${title || category.charAt(0).toUpperCase() + category.slice(1)} List`,
+    pageWidth / 2,
+    yPosition,
+    { align: "center" }
+  );
+
+  // Add date
+  yPosition += 10;
+  doc.setFontSize(12);
+  doc.setTextColor(72, 202, 234); // Secondary color
+  doc.text(
+    new Date().toLocaleDateString(),
+    pageWidth / 2,
+    yPosition,
+    { align: "center" }
+  );
+
+  // Add items
+  yPosition += 20;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(12);
 
   items.forEach((item, index) => {
-    if (yPosition > pageHeight - margin * 2) {
-      pdf.addPage();
-      pageNum++;
-      addHeader();
+    // Check if we need a new page
+    if (yPosition > pageHeight - margin) {
+      doc.addPage();
+      yPosition = margin;
     }
-    
-    const itemText = `${index + 1}. ${item.text}${
-      item.isCollected ? " ✓" : ""
-    }${
-      showPricing && item.price !== undefined
-        ? ` - ${currencySymbol}${item.price.toFixed(2)}`
-        : ""
-    }`;
-    
-    pdf.text(itemText, margin, yPosition);
-    yPosition += 15;
+
+    const itemText = `${index + 1}. ${item.text}${item.isCollected ? " ✓" : ""}`;
+    doc.text(itemText, margin, yPosition);
+
+    if (showPricing && item.price !== undefined) {
+      const priceText = `${currencySymbol}${item.price.toFixed(2)}`;
+      doc.text(priceText, pageWidth - margin - doc.getTextWidth(priceText), yPosition);
+    }
+
+    yPosition += 10;
   });
 
   // Add total if pricing is enabled
   if (showPricing && items.length > 0) {
-    if (yPosition > pageHeight - margin * 3) {
-      pdf.addPage();
-      pageNum++;
-      addHeader();
+    if (yPosition > pageHeight - margin * 2) {
+      doc.addPage();
+      yPosition = margin;
     }
-    
+
     const total = items.reduce((sum, item) => sum + (item.price || 0), 0);
     yPosition += 10;
-    
-    // Add separator line
-    pdf.setDrawColor(200, 200, 200);
-    pdf.line(margin, yPosition - 5, pageWidth - margin, yPosition - 5);
-    
-    // Add total amount
-    pdf.setFontSize(14);
-    pdf.setTextColor(51, 51, 51);
-    pdf.text(
-      `Total: ${currencySymbol}${total.toFixed(2)}`,
-      pageWidth - margin,
-      yPosition + 10,
-      { align: "right" }
-    );
+
+    doc.setDrawColor(0, 180, 216); // Primary light color
+    doc.line(margin, yPosition - 5, pageWidth - margin, yPosition - 5);
+
+    doc.setFontSize(14);
+    doc.setTextColor(0, 119, 182); // Primary dark color
+    const totalText = `Total: ${currencySymbol}${total.toFixed(2)}`;
+    doc.text(totalText, pageWidth - margin, yPosition + 5, { align: "right" });
   }
 
-  return pdf;
+  // Add watermark
+  doc.setTextColor(144, 224, 239, 0.3); // Accent color with opacity
+  doc.setFontSize(60);
+  const watermarkText = "Lovable Lists";
+  const textWidth = doc.getTextWidth(watermarkText);
+  doc.text(
+    watermarkText,
+    (pageWidth - textWidth) / 2,
+    pageHeight / 2,
+    { angle: 45 }
+  );
+
+  return doc;
 };
