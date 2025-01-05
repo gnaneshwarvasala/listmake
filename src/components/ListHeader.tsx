@@ -34,7 +34,7 @@ const ListHeader = ({
               className="text-2xl font-bold bg-transparent border-none focus:ring-0 placeholder:text-gray-400"
             />
           ) : (
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 animate-gradient">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-light animate-gradient">
               {category.charAt(0).toUpperCase() + category.slice(1)} List
             </h1>
           )}
@@ -42,10 +42,10 @@ const ListHeader = ({
         <Button
           variant="outline"
           onClick={onToggleLock}
-          className={`transition-colors duration-300 ${isLocked ? "bg-blue-50" : ""}`}
+          className={`transition-colors duration-300 ${isLocked ? "bg-primary/10" : ""}`}
         >
           {isLocked ? (
-            <Lock className="h-5 w-5 text-blue-500" />
+            <Lock className="h-5 w-5 text-primary" />
           ) : (
             <Unlock className="h-5 w-5" />
           )}

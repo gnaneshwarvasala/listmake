@@ -32,9 +32,9 @@ const ListItem = ({
           {...provided.dragHandleProps}
           className={cn(
             "group relative flex items-center gap-3 rounded-xl border p-4 shadow-lg transition-all duration-300",
-            "max-w-xl mx-auto hover:border-purple-200 hover:shadow-xl backdrop-blur-sm",
+            "max-w-xl mx-auto hover:border-primary/20 hover:shadow-xl backdrop-blur-sm",
             "bg-white/80 dark:bg-gray-800/80",
-            isCollected && "border-green-300 bg-gradient-to-r from-green-50/90 to-emerald-50/90 scale-[0.98]",
+            isCollected && "border-primary-light/30 bg-gradient-to-r from-primary-light/10 to-primary/10 scale-[0.98]",
             !isLocked && "active:cursor-grabbing"
           )}
           onClick={() => onToggleCollected(id)}
@@ -49,7 +49,7 @@ const ListItem = ({
           <div
             className={cn(
               "flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors duration-300",
-              isCollected ? "border-purple-500 bg-purple-500 scale-110" : "border-purple-300 hover:border-purple-400"
+              isCollected ? "border-primary bg-primary scale-110" : "border-primary/30 hover:border-primary/60"
             )}
           >
             {isCollected && <Check className="h-4 w-4 text-white" />}
@@ -62,7 +62,7 @@ const ListItem = ({
           >
             {text}
             {isCollected && (
-              <span className="ml-2 text-sm text-purple-600 italic font-normal">
+              <span className="ml-2 text-sm text-primary italic font-normal">
                 Completed
               </span>
             )}

@@ -1,4 +1,4 @@
-import { Plus, Mic } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -28,22 +28,16 @@ const ListActions = ({ newItemText, setNewItemText, isLocked, onAddItem }: ListA
           value={newItemText}
           onChange={(e) => setNewItemText(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && !isLocked && handleAddItem()}
-          className="w-full pl-4 pr-10 py-2 text-lg rounded-xl border-2 border-purple-100 focus:border-purple-300 focus:ring-purple-200 bg-white/80 backdrop-blur-sm shadow-sm"
+          className="w-full pl-4 pr-10 py-2 text-lg rounded-xl border-2 border-primary/20 focus:border-primary focus:ring-primary/20 bg-white/80 backdrop-blur-sm shadow-sm"
           disabled={isLocked}
         />
       </div>
       <Button 
         onClick={handleAddItem} 
         disabled={isLocked}
-        className="bg-purple-500 hover:bg-purple-600 transition-colors duration-300 rounded-xl shadow-lg hover:shadow-xl"
+        className="bg-primary hover:bg-primary-dark transition-colors duration-300 rounded-xl shadow-lg hover:shadow-xl"
       >
         <Plus className="h-5 w-5 text-white" />
-      </Button>
-      <Button
-        variant="outline"
-        className="rounded-xl border-2 border-purple-100 hover:border-purple-300 shadow-sm hover:shadow-md"
-      >
-        <Mic className="h-5 w-5 text-purple-500" />
       </Button>
     </div>
   );
