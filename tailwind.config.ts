@@ -22,6 +22,9 @@ export default {
       }
     },
     extend: {
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+      },
       colors: {
         'primary-dark': '#0077B6',
         'primary': '#0096C7',
