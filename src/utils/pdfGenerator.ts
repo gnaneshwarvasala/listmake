@@ -31,17 +31,17 @@ export const generatePDF = (
   const addHeader = () => {
     yPosition = margin;
     
-    // Add logo or title with improved styling
+    // Reset text properties after watermark
     pdf.setFontSize(24);
-    pdf.setTextColor(128, 0, 128);
+    pdf.setTextColor(128, 0, 128); // Purple color for header
     pdf.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
     
-    // Add page number with better styling
+    // Add page number
     pdf.setFontSize(10);
     pdf.setTextColor(128, 128, 128);
     pdf.text(`Page ${pageNum}`, pageWidth - margin, pageHeight - margin, { align: "right" });
     
-    // Add list title with enhanced styling
+    // Add list title
     yPosition += 25;
     pdf.setFontSize(18);
     pdf.setTextColor(51, 51, 51);
@@ -52,7 +52,7 @@ export const generatePDF = (
       { align: "center" }
     );
     
-    // Add date with improved formatting
+    // Add date
     yPosition += 15;
     pdf.setFontSize(10);
     pdf.setTextColor(128, 128, 128);
@@ -75,6 +75,7 @@ export const generatePDF = (
   
   // Set consistent font for items
   pdf.setFontSize(12);
+  pdf.setTextColor(51, 51, 51);
 
   items.forEach((item, index) => {
     if (yPosition > pageHeight - margin * 2) {
@@ -86,23 +87,16 @@ export const generatePDF = (
     const itemText = `${index + 1}. ${item.text}${
       item.isCollected ? " ✓" : ""
     }${
-      showPricing && item.price
+      showPricing && item.price !== undefined
         ? ` - ${currencySymbol}${item.price.toFixed(2)}`
         : ""
     }`;
     
-    // Enhanced styling for items
-    if (item.isCollected) {
-      pdf.setFillColor(245, 245, 245);
-      pdf.rect(margin - 5, yPosition - 5, pageWidth - (margin * 2) + 10, 10, "F");
-    }
-    
-    pdf.setTextColor(item.isCollected ? 128 : 51, item.isCollected ? 128 : 51, item.isCollected ? 128 : 51);
     pdf.text(itemText, margin, yPosition);
     yPosition += 15;
   });
 
-  // Add total if pricing is enabled with improved styling
+  // Add total if pricing is enabled
   if (showPricing && items.length > 0) {
     if (yPosition > pageHeight - margin * 3) {
       pdf.addPage();
@@ -112,8 +106,12 @@ export const generatePDF = (
     
     const total = items.reduce((sum, item) => sum + (item.price || 0), 0);
     yPosition += 10;
+    
+    // Add separator line
     pdf.setDrawColor(200, 200, 200);
     pdf.line(margin, yPosition - 5, pageWidth - margin, yPosition - 5);
+    
+    // Add total amount
     pdf.setFontSize(14);
     pdf.setTextColor(51, 51, 51);
     pdf.text(
