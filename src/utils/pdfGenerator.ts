@@ -18,7 +18,7 @@ export const generatePDF = (
   
   // Add watermark
   const watermarkText = "Lovable Lists";
-  pdf.setTextColor(200, 200, 200); // Light gray
+  pdf.setTextColor(200, 200, 200);
   pdf.setFontSize(60);
   pdf.setGState({ opacity: 0.2 });
   
