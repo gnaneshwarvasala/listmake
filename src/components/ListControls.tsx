@@ -24,15 +24,18 @@ const ListControls = ({
   onExportPDF
 }: ListControlsProps) => {
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 bg-white/80 p-4 rounded-lg shadow-sm backdrop-blur-sm">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex items-center space-x-2">
           <Switch
             checked={showPricing}
             onCheckedChange={setShowPricing}
             id="pricing-toggle"
+            className="data-[state=checked]:bg-primary"
           />
-          <Label htmlFor="pricing-toggle">Show Pricing</Label>
+          <Label htmlFor="pricing-toggle" className="font-medium text-gray-700">
+            Show Pricing
+          </Label>
         </div>
         {showPricing && (
           <CurrencySelector
