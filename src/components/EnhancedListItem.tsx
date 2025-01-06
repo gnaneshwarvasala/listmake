@@ -42,20 +42,20 @@ const EnhancedListItem = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            "group relative flex items-center gap-3 p-3 transition-all duration-300",
-            "max-w-xl mx-auto rounded-lg border shadow-sm hover:shadow-md",
-            "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm",
-            isCollected && "bg-neon-blue-50 border-neon-blue-200 scale-[0.98]",
-            isHighlighted && "ring-2 ring-neon-blue ring-offset-2",
+            "group relative flex items-center gap-3 p-4 transition-all duration-300",
+            "max-w-xl mx-auto rounded-2xl border shadow-sm hover:shadow-md",
+            "bg-white/95 backdrop-blur-sm",
+            isCollected && "bg-light-cyan-500/20 border-light-cyan-400/30",
+            isHighlighted && "ring-2 ring-neon-blue-400 ring-offset-2",
             !isLocked && "cursor-grab active:cursor-grabbing",
             "mb-2"
           )}
         >
           <div
             className={cn(
-              "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors duration-300",
-              isCollected ? "border-neon-blue bg-neon-blue" : "border-gray-300",
-              "hover:border-neon-blue/60"
+              "flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors duration-300",
+              isCollected ? "border-neon-blue-400 bg-neon-blue-400" : "border-gray-300",
+              "hover:border-neon-blue-400/60"
             )}
             onClick={() => onToggleCollected(id)}
           >
@@ -65,16 +65,11 @@ const EnhancedListItem = ({
           <div className="flex-1 min-w-0">
             <span
               className={cn(
-                "block text-sm font-medium transition-all duration-300 truncate",
-                isCollected ? "text-gray-500" : "text-gray-700"
+                "block text-base font-medium transition-all duration-300 truncate",
+                isCollected ? "text-gray-400" : "text-gray-700"
               )}
             >
               {text}
-              {isCollected && (
-                <span className="ml-2 text-xs text-neon-blue italic">
-                  Completed
-                </span>
-              )}
             </span>
           </div>
           

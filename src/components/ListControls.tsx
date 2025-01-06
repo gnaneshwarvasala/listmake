@@ -1,21 +1,19 @@
 import React from "react";
+import { Share2, FileDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { DollarSign } from "lucide-react";
-import CurrencySelector from "./CurrencySelector";
-import ShareOptions from "./ShareOptions";
-import SearchBar from "./SearchBar";
+import { Input } from "@/components/ui/input";
 
 interface ListControlsProps {
   showPricing: boolean;
-  setShowPricing: (show: boolean) => void;
+  setShowPricing: (value: boolean) => void;
   currencySymbol: string;
-  setCurrencySymbol: (symbol: string) => void;
+  setCurrencySymbol: (value: string) => void;
   isLocked: boolean;
-  onShare: (method: string) => void;
+  onShare: (method: string) => Promise<void>;
   onExportPDF: () => void;
   searchTerm: string;
-  onSearch: (term: string) => void;
+  onSearch: (value: string) => void;
 }
 
 const ListControls = ({
@@ -27,37 +25,59 @@ const ListControls = ({
   onShare,
   onExportPDF,
   searchTerm,
-  onSearch
+  onSearch,
 }: ListControlsProps) => {
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 bg-white/80 shadow-sm rounded-xl p-4 backdrop-blur-sm">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
-        <div className="flex items-center space-x-3 bg-neon-blue-50 p-2 rounded-lg hover:bg-neon-blue-100 transition-colors duration-300">
-          <DollarSign className="h-4 w-4 text-neon-blue" />
+    <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-gray-100 shadow-sm">
+      <div className="flex items-center gap-4 w-full sm:w-auto">
+        <div className="flex items-center gap-2">
           <Switch
             checked={showPricing}
             onCheckedChange={setShowPricing}
-            id="pricing-toggle"
-            className="data-[state=checked]:bg-neon-blue"
+            disabled={isLocked}
           />
-          <Label htmlFor="pricing-toggle" className="text-sm font-medium text-gray-700">
-            Show Pricing
-          </Label>
-        </div>
-        
-        <div className="flex-1 min-w-0">
-          <SearchBar searchTerm={searchTerm} onSearch={onSearch} />
+          <span className="text-sm font-medium">Show Pricing</span>
         </div>
         
         {showPricing && (
-          <CurrencySelector
+          <Input
+            type="text"
             value={currencySymbol}
-            onChange={setCurrencySymbol}
+            onChange={(e) => setCurrencySymbol(e.target.value)}
+            className="w-16 h-8"
+            placeholder="$"
             disabled={isLocked}
           />
         )}
       </div>
-      <ShareOptions onShare={onShare} onExportPDF={onExportPDF} />
+
+      <div className="flex items-center gap-2 w-full sm:w-auto">
+        <Input
+          type="text"
+          placeholder="Search items..."
+          value={searchTerm}
+          onChange={(e) => onSearch(e.target.value)}
+          className="w-full sm:w-64 h-9"
+        />
+        
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onShare("message")}
+          className="h-9 w-9 bg-white"
+        >
+          <Share2 className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onExportPDF}
+          className="h-9 w-9 bg-white"
+        >
+          <FileDown className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 };
