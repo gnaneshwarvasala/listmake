@@ -1,4 +1,4 @@
-import { Share2, Download, Mail, Link2, MessageSquare } from "lucide-react";
+import { Share2, Download, Mail, MessageSquare, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -29,37 +29,35 @@ const ShareOptions = ({ onShare, onExportPDF }: ShareOptionsProps) => {
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            size="sm"
-            className="flex items-center gap-1.5 px-2.5 h-8"
+            size="icon"
+            className="h-8 w-8"
           >
-            <Share2 className="h-3.5 w-3.5" />
-            <span className="text-sm">Share</span>
+            <Share2 className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem onClick={() => onShare("email")}>
-            <Mail className="h-3.5 w-3.5 mr-2" />
-            <span className="text-sm">Email</span>
+            <Mail className="h-4 w-4 mr-2" />
+            <span>Email</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onShare("message")}>
-            <MessageSquare className="h-3.5 w-3.5 mr-2" />
-            <span className="text-sm">Message</span>
+            <MessageSquare className="h-4 w-4 mr-2" />
+            <span>Message</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleCopyLink}>
-            <Link2 className="h-3.5 w-3.5 mr-2" />
-            <span className="text-sm">Copy Link</span>
+            <Link2 className="h-4 w-4 mr-2" />
+            <span>Copy Link</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       <Button
         variant="outline"
-        size="sm"
+        size="icon"
         onClick={onExportPDF}
-        className="flex items-center gap-1.5 px-2.5 h-8"
+        className="h-8 w-8"
       >
-        <Download className="h-3.5 w-3.5" />
-        <span className="text-sm">Export PDF</span>
+        <Download className="h-4 w-4" />
       </Button>
     </div>
   );

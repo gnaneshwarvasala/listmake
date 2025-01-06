@@ -9,14 +9,14 @@ interface SearchBarProps {
 
 const SearchBar = ({ searchTerm, onSearch }: SearchBarProps) => {
   return (
-    <div className="relative mb-4">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+    <div className="relative w-full">
+      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
       <Input
         type="text"
         placeholder="Search items..."
         value={searchTerm}
         onChange={(e) => onSearch(e.target.value)}
-        className="pl-10 pr-4 py-2 w-full bg-white/80 backdrop-blur-sm border-2 border-primary/20 focus:border-primary rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+        className="pl-8 pr-4 py-2 h-9 text-sm bg-white/90 border-gray-200 focus:border-neon-blue focus:ring-neon-blue rounded-md"
       />
     </div>
   );
