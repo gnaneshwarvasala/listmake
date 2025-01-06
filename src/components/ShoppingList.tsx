@@ -217,9 +217,6 @@ const ShoppingList = () => {
             isLocked={isLocked}
             onShare={handleShare}
             onExportPDF={exportToPDF}
-          />
-          
-          <SearchBar 
             searchTerm={searchTerm}
             onSearch={setSearchTerm}
           />
