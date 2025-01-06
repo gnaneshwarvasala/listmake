@@ -1,6 +1,6 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Check, Trash2 } from "lucide-react";
+import { Check, Trash2, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ interface EnhancedListItemProps {
   showPricing?: boolean;
   price?: number;
   currencySymbol?: string;
+  isHighlighted?: boolean;
   onToggleCollected: (id: string) => void;
   onDelete: (id: string) => void;
   onUpdatePrice?: (id: string, price: number) => void;
@@ -28,6 +29,7 @@ const EnhancedListItem = ({
   showPricing,
   price,
   currencySymbol = "$",
+  isHighlighted,
   onToggleCollected,
   onDelete,
   onUpdatePrice
@@ -40,41 +42,43 @@ const EnhancedListItem = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            "group relative flex flex-col sm:flex-row items-start sm:items-center gap-2 rounded-lg border p-3 shadow-sm transition-all duration-300",
-            "max-w-xl mx-auto hover:border-blue-200 hover:shadow-md cursor-pointer",
-            isCollected && "border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 scale-[0.98]",
-            !isLocked && "cursor-grab active:cursor-grabbing"
+            "group relative flex flex-col sm:flex-row items-start sm:items-center gap-2 rounded-xl border p-4 shadow-sm transition-all duration-300",
+            "max-w-xl mx-auto hover:border-primary/20 hover:shadow-md backdrop-blur-sm",
+            "bg-white/80 dark:bg-gray-800/80",
+            isCollected && "border-primary-light/30 bg-gradient-to-r from-primary-light/10 to-primary/10 scale-[0.98]",
+            isHighlighted && "ring-2 ring-primary ring-offset-2 bg-primary/5",
+            !isLocked && "cursor-grab active:cursor-grabbing",
+            "mb-3 sm:mb-4"
           )}
-          onClick={() => onToggleCollected(id)}
-          role="button"
-          tabIndex={0}
-          onKeyPress={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              onToggleCollected(id);
-            }
-          }}
         >
-          <div className="flex items-center gap-2 w-full">
-            <div
-              className={cn(
-                "flex h-5 w-5 items-center justify-center rounded-full border transition-colors duration-300",
-                isCollected ? "border-green-500 bg-green-500 scale-110" : "border-gray-300",
-                "flex-shrink-0"
-              )}
-            >
-              {isCollected && <Check className="h-3 w-3 text-white animate-scale-in" />}
+          <div className="flex items-center gap-3 w-full">
+            <div className="flex items-center gap-2">
+              <Package className={cn(
+                "h-5 w-5 transition-colors duration-300",
+                isCollected ? "text-primary" : "text-gray-400"
+              )} />
+              <div
+                className={cn(
+                  "flex h-5 w-5 items-center justify-center rounded-full border transition-all duration-300",
+                  isCollected ? "border-primary bg-primary scale-110" : "border-gray-300",
+                  "hover:border-primary/60"
+                )}
+                onClick={() => onToggleCollected(id)}
+              >
+                {isCollected && <Check className="h-3 w-3 text-white animate-scale-in" />}
+              </div>
             </div>
             
             <div className="flex-1 min-w-0">
               <span
                 className={cn(
                   "block text-base font-medium transition-all duration-300 truncate",
-                  isCollected ? "text-gray-600" : "text-gray-800"
+                  isCollected ? "text-gray-500" : "text-gray-700"
                 )}
               >
                 {text}
                 {isCollected && (
-                  <span className="ml-2 text-sm text-green-600 italic">
+                  <span className="ml-2 text-sm text-primary italic">
                     Completed
                   </span>
                 )}
@@ -93,7 +97,7 @@ const EnhancedListItem = ({
                     e.stopPropagation();
                     onUpdatePrice?.(id, parseFloat(e.target.value) || 0);
                   }}
-                  className="w-20 h-8 text-sm"
+                  className="w-24 h-8 text-sm bg-white/90"
                   placeholder="0.00"
                   step="0.01"
                   min="0"
@@ -107,7 +111,7 @@ const EnhancedListItem = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0"
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-50"
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete(id);
