@@ -1,9 +1,10 @@
 import React from "react";
-import { FileDown, Search } from "lucide-react";
+import { FileDown, Search, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "./ThemeToggle";
+import ShareOptions from "./ShareOptions";
 
 interface ListControlsProps {
   showPricing: boolean;
@@ -23,6 +24,7 @@ const ListControls = ({
   currencySymbol,
   setCurrencySymbol,
   isLocked,
+  onShare,
   onExportPDF,
   searchTerm,
   onSearch,
@@ -31,12 +33,17 @@ const ListControls = ({
     <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm p-3 rounded-custom border border-gray-100 dark:border-gray-700 shadow-sm">
       <div className="flex items-center gap-3 w-full sm:w-auto">
         <div className="flex items-center gap-2">
-          <Switch
-            checked={showPricing}
-            onCheckedChange={setShowPricing}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowPricing(!showPricing)}
+            className={`h-7 text-xs transition-all duration-300 ${
+              showPricing ? "bg-primary text-white hover:bg-primary-dark" : ""
+            }`}
             disabled={isLocked}
-          />
-          <span className="text-xs font-medium dark:text-gray-200">Show Pricing</span>
+          >
+            Show Price
+          </Button>
         </div>
         
         {showPricing && (
@@ -63,15 +70,7 @@ const ListControls = ({
           />
         </div>
         
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={onExportPDF}
-          className="h-7 w-7 rounded-custom bg-white dark:bg-gray-800"
-        >
-          <FileDown className="h-3 w-3 text-gray-600 dark:text-gray-300" />
-        </Button>
-
+        <ShareOptions onShare={onShare} onExportPDF={onExportPDF} />
         <ThemeToggle />
       </div>
     </div>
