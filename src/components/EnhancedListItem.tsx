@@ -42,11 +42,12 @@ const EnhancedListItem = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            "group relative flex items-center gap-3 p-4 transition-all duration-300",
-            "max-w-xl mx-auto rounded-2xl border shadow-sm hover:shadow-md",
-            "bg-white/95 backdrop-blur-sm",
-            isCollected && "bg-light-cyan-500/20 border-light-cyan-400/30",
-            isHighlighted && "ring-2 ring-neon-blue-400 ring-offset-2",
+            "group relative flex items-center gap-3 p-3 transition-all duration-300",
+            "max-w-xl mx-auto rounded-custom border shadow-sm hover:shadow-md",
+            "bg-gradient-to-r from-gradient-start/5 to-gradient-end/5",
+            "dark:from-gray-800 dark:to-gray-700",
+            isCollected && "bg-gradient-to-r from-gradient-start/20 to-gradient-end/20 dark:from-gray-700 dark:to-gray-600",
+            isHighlighted && "ring-2 ring-gradient-start dark:ring-gradient-end ring-offset-2",
             !isLocked && "cursor-grab active:cursor-grabbing",
             "mb-2"
           )}
@@ -54,19 +55,19 @@ const EnhancedListItem = ({
           <div
             className={cn(
               "flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors duration-300",
-              isCollected ? "border-neon-blue-400 bg-neon-blue-400" : "border-gray-300",
-              "hover:border-neon-blue-400/60"
+              isCollected ? "border-gradient-start bg-gradient-start dark:border-gradient-end dark:bg-gradient-end" : "border-gray-300 dark:border-gray-600",
+              "hover:border-gradient-start dark:hover:border-gradient-end"
             )}
             onClick={() => onToggleCollected(id)}
           >
-            {isCollected && <Check className="h-3 w-3 text-white animate-scale-in" />}
+            {isCollected && <Check className="h-4 w-4 text-white animate-scale-in" />}
           </div>
           
           <div className="flex-1 min-w-0">
             <span
               className={cn(
                 "block text-base font-medium transition-all duration-300 truncate",
-                isCollected ? "text-gray-400" : "text-gray-700"
+                isCollected ? "text-gray-500 dark:text-gray-400" : "text-gray-700 dark:text-gray-200"
               )}
             >
               {text}
@@ -76,7 +77,7 @@ const EnhancedListItem = ({
           <div className="flex items-center gap-2">
             {showPricing && (
               <div className="flex items-center gap-1">
-                <span className="text-gray-400 text-sm">{currencySymbol}</span>
+                <span className="text-gray-400 dark:text-gray-500 text-sm">{currencySymbol}</span>
                 <Input
                   type="number"
                   value={price || ""}
@@ -84,7 +85,7 @@ const EnhancedListItem = ({
                     e.stopPropagation();
                     onUpdatePrice?.(id, parseFloat(e.target.value) || 0);
                   }}
-                  className="w-20 h-8 text-sm bg-white/90"
+                  className="w-20 h-8 text-sm rounded-custom bg-white/90 dark:bg-gray-800/90"
                   placeholder="0.00"
                   step="0.01"
                   min="0"
@@ -98,7 +99,7 @@ const EnhancedListItem = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-8 w-8"
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-8 w-8 rounded-custom"
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete(id);

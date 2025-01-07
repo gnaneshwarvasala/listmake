@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import confetti from 'canvas-confetti';
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { CategoryType } from "./CategorySelector";
-import { validateListCreation } from "@/utils/listValidation";
-import { isListTypeEnabled } from "@/utils/listTypes";
-import { getBackgroundClass } from "@/utils/backgroundUtils";
-import ProgressBar from "./Progress";
 import ListHeader from "./ListHeader";
 import EnhancedListItem from "./EnhancedListItem";
 import ListActions from "./ListActions";
 import ListControls from "./ListControls";
-import SearchBar from "./SearchBar";
 import { generatePDF } from "@/utils/pdfGenerator";
 import { showToast } from "@/utils/toastConfig";
 import { Item } from "@/types/item";
@@ -190,16 +184,9 @@ const ShoppingList = () => {
   );
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${getBackgroundClass(category)} p-4 md:p-8 transition-all duration-500`}>
-      <div className="w-full max-w-4xl mx-auto space-y-6">
-        {/* Ad Space - Top */}
-        <div className="h-24 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 mb-8 hidden md:block">
-          <div className="flex items-center justify-center h-full text-gray-400">
-            Ad Space
-          </div>
-        </div>
-
-        <div className="space-y-6 max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-gradient-start to-gradient-end dark:from-gray-900 dark:to-gray-800 p-3 md:p-6 transition-all duration-500">
+      <div className="w-full max-w-4xl mx-auto space-y-4">
+        <div className="space-y-4 max-w-2xl mx-auto">
           <ListHeader
             category={category}
             onCategoryChange={setCategory}
@@ -221,8 +208,6 @@ const ShoppingList = () => {
             onSearch={setSearchTerm}
           />
           
-          <ProgressBar total={items.length} completed={completedItems} />
-          
           <ListActions
             newItemText={newItemText}
             setNewItemText={setNewItemText}
@@ -236,7 +221,7 @@ const ShoppingList = () => {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className="space-y-3"
+                  className="space-y-2"
                 >
                   {filteredItems.map((item, index) => (
                     <EnhancedListItem
@@ -262,22 +247,15 @@ const ShoppingList = () => {
           </DragDropContext>
 
           {showPricing && items.length > 0 && (
-            <div className="mt-4 p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm">
+            <div className="mt-4 p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-custom shadow-sm">
               <div className="flex justify-between items-center">
-                <span className="font-semibold">Total:</span>
-                <span className="text-lg font-bold">
+                <span className="font-semibold dark:text-gray-200">Total:</span>
+                <span className="text-lg font-bold dark:text-gray-200">
                   {currencySymbol}{items.reduce((total, item) => total + (item.price || 0), 0).toFixed(2)}
                 </span>
               </div>
             </div>
           )}
-        </div>
-
-        {/* Ad Space - Bottom */}
-        <div className="h-24 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 mt-8 hidden md:block">
-          <div className="flex items-center justify-center h-full text-gray-400">
-            Ad Space
-          </div>
         </div>
       </div>
     </div>

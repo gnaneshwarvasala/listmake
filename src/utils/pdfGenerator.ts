@@ -9,7 +9,6 @@ export const generatePDF = (
   showPricing: boolean,
   currencySymbol: string
 ): jsPDF => {
-  // Initialize PDF
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -91,15 +90,16 @@ export const generatePDF = (
     doc.text(totalText, pageWidth - margin, yPosition + 5, { align: "right" });
   }
 
-  // Add watermark
-  doc.setTextColor(144, 224, 239, 0.3); // Accent color with opacity
+  // Update watermark with transparency
+  doc.setGState(new doc.GState({ opacity: 0.1 }));
+  doc.setTextColor(144, 224, 239);
   doc.setFontSize(60);
   const watermarkText = "Lovable Lists";
   const textWidth = doc.getTextWidth(watermarkText);
   doc.text(
     watermarkText,
-    (pageWidth - textWidth) / 2,
-    pageHeight / 2,
+    (doc.internal.pageSize.getWidth() - textWidth) / 2,
+    doc.internal.pageSize.getHeight() / 2,
     { angle: 45 }
   );
 

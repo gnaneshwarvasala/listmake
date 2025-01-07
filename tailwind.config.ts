@@ -12,7 +12,7 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: '1.5rem',
       screens: {
         'sm': '640px',
         'md': '768px',
@@ -133,9 +133,12 @@ export default {
           'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
-        }
+        },
+        'gradient-start': '#FFDEE9',
+        'gradient-end': '#B5FFFC',
       },
       borderRadius: {
+        'custom': '10px',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
