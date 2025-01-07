@@ -91,7 +91,7 @@ export const generatePDF = (
 
   // Add watermark with transparency
   const opacity = 0.1;
-  const gState = doc.addGState({ opacity });
+  const gState = doc.addGState({ opacity: opacity }, doc.internal.newObject());
   doc.setGState(gState);
   doc.setTextColor(144, 224, 239);
   doc.setFontSize(60);
