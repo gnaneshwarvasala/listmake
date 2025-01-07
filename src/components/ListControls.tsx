@@ -1,5 +1,5 @@
 import React from "react";
-import { Share2, FileDown, Search } from "lucide-react";
+import { FileDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,6 @@ const ListControls = ({
   currencySymbol,
   setCurrencySymbol,
   isLocked,
-  onShare,
   onExportPDF,
   searchTerm,
   onSearch,
@@ -37,7 +36,7 @@ const ListControls = ({
             onCheckedChange={setShowPricing}
             disabled={isLocked}
           />
-          <span className="text-sm font-medium dark:text-gray-200">Show Pricing</span>
+          <span className="text-xs font-medium dark:text-gray-200">Show Pricing</span>
         </div>
         
         {showPricing && (
@@ -45,7 +44,7 @@ const ListControls = ({
             type="text"
             value={currencySymbol}
             onChange={(e) => setCurrencySymbol(e.target.value)}
-            className="w-16 h-8 rounded-custom"
+            className="w-14 h-7 text-xs rounded-custom"
             placeholder="$"
             disabled={isLocked}
           />
@@ -53,33 +52,24 @@ const ListControls = ({
       </div>
 
       <div className="flex items-center gap-2 w-full sm:w-auto">
-        <div className="relative flex-1 sm:w-64">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+        <div className="relative flex-1 sm:w-48">
+          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-3 w-3" />
           <Input
             type="text"
             placeholder="Search items..."
             value={searchTerm}
             onChange={(e) => onSearch(e.target.value)}
-            className="pl-8 pr-4 h-9 rounded-custom"
+            className="pl-7 pr-3 h-7 text-xs rounded-custom"
           />
         </div>
         
         <Button
           variant="outline"
           size="icon"
-          onClick={() => onShare("email")}
-          className="h-9 w-9 rounded-custom bg-white dark:bg-gray-800"
-        >
-          <Share2 className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-        </Button>
-        
-        <Button
-          variant="outline"
-          size="icon"
           onClick={onExportPDF}
-          className="h-9 w-9 rounded-custom bg-white dark:bg-gray-800"
+          className="h-7 w-7 rounded-custom bg-white dark:bg-gray-800"
         >
-          <FileDown className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+          <FileDown className="h-3 w-3 text-gray-600 dark:text-gray-300" />
         </Button>
 
         <ThemeToggle />

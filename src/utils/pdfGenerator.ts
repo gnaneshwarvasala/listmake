@@ -91,8 +91,8 @@ export const generatePDF = (
 
   // Update watermark with transparency
   const opacity = 0.1;
-  doc.saveGraphicsState();
-  doc.setGState(doc.addGState({ opacity }));
+  const gState = doc.addGState({ opacity });
+  doc.setGState(gState);
   doc.setTextColor(144, 224, 239);
   doc.setFontSize(60);
   const watermarkText = "Lovable Lists";
@@ -103,7 +103,6 @@ export const generatePDF = (
     pageHeight / 2,
     { angle: 45 }
   );
-  doc.restoreGraphicsState();
 
   return doc;
 };
