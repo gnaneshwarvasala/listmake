@@ -1,10 +1,12 @@
-import { toast } from "sonner";
+import { CategoryType } from "@/components/CategorySelector";
 
-export const MAX_LISTS = 100;
+export const isListTypeEnabled = (category: CategoryType): boolean => {
+  const enabledTypes: CategoryType[] = ["grocery", "custom"];
+  return enabledTypes.includes(category);
+};
 
 export const validateListCreation = (currentItemsCount: number): boolean => {
-  if (currentItemsCount >= MAX_LISTS) {
-    toast.error(`You've reached the maximum limit of ${MAX_LISTS} items`);
+  if (currentItemsCount >= 100) { // Maximum 100 items
     return false;
   }
   return true;

@@ -23,13 +23,13 @@ export const generatePDF = (
 
   // Add header
   doc.setFontSize(24);
-  doc.setTextColor(0, 119, 182); // Primary dark color
+  doc.setTextColor(0, 119, 182);
   doc.text("Lovable Lists", pageWidth / 2, yPosition, { align: "center" });
 
   // Add title
   yPosition += 15;
   doc.setFontSize(18);
-  doc.setTextColor(0, 150, 199); // Primary color
+  doc.setTextColor(0, 150, 199);
   doc.text(
     `${title || category.charAt(0).toUpperCase() + category.slice(1)} List`,
     pageWidth / 2,
@@ -40,7 +40,7 @@ export const generatePDF = (
   // Add date
   yPosition += 10;
   doc.setFontSize(12);
-  doc.setTextColor(72, 202, 234); // Secondary color
+  doc.setTextColor(72, 202, 234);
   doc.text(
     new Date().toLocaleDateString(),
     pageWidth / 2,
@@ -54,7 +54,6 @@ export const generatePDF = (
   doc.setFontSize(12);
 
   items.forEach((item, index) => {
-    // Check if we need a new page
     if (yPosition > pageHeight - margin) {
       doc.addPage();
       yPosition = margin;
@@ -81,27 +80,30 @@ export const generatePDF = (
     const total = items.reduce((sum, item) => sum + (item.price || 0), 0);
     yPosition += 10;
 
-    doc.setDrawColor(0, 180, 216); // Primary light color
+    doc.setDrawColor(0, 180, 216);
     doc.line(margin, yPosition - 5, pageWidth - margin, yPosition - 5);
 
     doc.setFontSize(14);
-    doc.setTextColor(0, 119, 182); // Primary dark color
+    doc.setTextColor(0, 119, 182);
     const totalText = `Total: ${currencySymbol}${total.toFixed(2)}`;
     doc.text(totalText, pageWidth - margin, yPosition + 5, { align: "right" });
   }
 
   // Update watermark with transparency
-  doc.setGState(new doc.GState({ opacity: 0.1 }));
+  const opacity = 0.1;
+  doc.saveGraphicsState();
+  doc.setGState(doc.addGState({ opacity }));
   doc.setTextColor(144, 224, 239);
   doc.setFontSize(60);
   const watermarkText = "Lovable Lists";
   const textWidth = doc.getTextWidth(watermarkText);
   doc.text(
     watermarkText,
-    (doc.internal.pageSize.getWidth() - textWidth) / 2,
-    doc.internal.pageSize.getHeight() / 2,
+    (pageWidth - textWidth) / 2,
+    pageHeight / 2,
     { angle: 45 }
   );
+  doc.restoreGraphicsState();
 
   return doc;
 };
