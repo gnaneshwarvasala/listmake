@@ -89,10 +89,8 @@ export const generatePDF = (
     doc.text(totalText, pageWidth - margin, yPosition + 5, { align: "right" });
   }
 
-  // Add watermark with transparency
-  const opacity = 0.1;
-  const gState = doc.addGState({ opacity: opacity }, doc.internal.newObject());
-  doc.setGState(gState);
+  // Add watermark
+  doc.setGlobalAlpha(0.1);
   doc.setTextColor(144, 224, 239);
   doc.setFontSize(60);
   const watermarkText = "Lovable Lists";
@@ -102,7 +100,11 @@ export const generatePDF = (
   const watermarkX = (pageWidth - textWidth) / 2;
   const watermarkY = pageHeight / 2;
   
+  // Add rotated watermark
   doc.text(watermarkText, watermarkX, watermarkY, { angle: 45 });
+  
+  // Reset opacity
+  doc.setGlobalAlpha(1);
 
   return doc;
 };
