@@ -36,31 +36,34 @@ const EnhancedListItem = ({
 }: EnhancedListItemProps) => {
   return (
     <Draggable draggableId={id} index={index} isDragDisabled={isLocked}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
             "group relative flex items-center gap-3 p-2.5 transition-all duration-300",
-            "max-w-xl mx-auto rounded-custom border shadow-sm hover:shadow-md",
+            "max-w-xl mx-auto rounded-xl border shadow-sm hover:shadow-md",
             "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm",
+            "transform hover:-translate-y-0.5 transition-transform duration-200",
             isCollected && "bg-gradient-to-r from-primary-light/10 to-primary/10 scale-[0.98]",
             isHighlighted && "ring-2 ring-primary/30",
             !isLocked && "cursor-grab active:cursor-grabbing",
-            "transform hover:-translate-y-0.5 transition-transform duration-200"
+            snapshot.isDragging && "rotate-1 scale-105 shadow-lg",
           )}
           onClick={() => onToggleCollected(id)}
         >
           <div
             className={cn(
-              "flex h-4 w-4 items-center justify-center rounded-full border transition-all duration-300",
+              "flex h-5 w-5 items-center justify-center rounded-full border transition-all duration-300",
               isCollected 
                 ? "border-primary-light bg-primary-light scale-110" 
                 : "border-gray-300 dark:border-gray-600 hover:border-primary-light"
             )}
           >
-            {isCollected && <Check className="h-2.5 w-2.5 text-white animate-scale-in" />}
+            {isCollected && (
+              <Check className="h-3 w-3 text-white animate-scale-in" />
+            )}
           </div>
           
           <span
@@ -71,7 +74,7 @@ const EnhancedListItem = ({
           >
             {text}
             {isCollected && (
-              <span className="ml-2 text-xs text-primary-light italic">
+              <span className="ml-2 text-xs text-primary-light italic animate-fade-in">
                 Completed
               </span>
             )}
@@ -87,7 +90,7 @@ const EnhancedListItem = ({
                   e.stopPropagation();
                   onUpdatePrice?.(id, parseFloat(e.target.value) || 0);
                 }}
-                className="w-16 h-6 text-xs rounded-custom bg-white/90 dark:bg-gray-800/90"
+                className="w-16 h-6 text-xs rounded-lg bg-white/90 dark:bg-gray-800/90"
                 placeholder="0.00"
                 step="0.01"
                 min="0"
