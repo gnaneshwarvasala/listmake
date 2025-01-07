@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "next-themes";
 import Welcome from "./pages/Welcome";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -13,32 +14,34 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner 
-        position="top-right" 
-        closeButton 
-        duration={3000} 
-        theme="light"
-        className="font-inter"
-        toastOptions={{
-          classNames: {
-            toast: "font-inter",
-            title: "font-semibold",
-            description: "text-sm"
-          }
-        }}
-      />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/lists" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/faq" element={<FAQ />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner 
+          position="top-right" 
+          closeButton 
+          duration={3000}
+          theme="system"
+          className="font-inter"
+          toastOptions={{
+            classNames: {
+              toast: "font-inter dark:bg-gray-800 dark:text-white",
+              title: "font-semibold",
+              description: "text-sm"
+            }
+          }}
+        />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/lists" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/faq" element={<FAQ />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
