@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "./ThemeToggle";
 import ShareOptions from "./ShareOptions";
+import { cn } from "@/lib/utils";
 
 interface ListControlsProps {
   showPricing: boolean;
