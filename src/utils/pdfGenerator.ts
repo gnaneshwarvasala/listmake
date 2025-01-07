@@ -102,7 +102,7 @@ export const generatePDF = (
   const watermarkY = pageHeight / 2;
   
   // Add rotated watermark with reduced opacity
-  doc.setFillOpacity(0.1);
+  doc.setGState(new doc.GState({ opacity: 0.1 }));
   doc.text(watermarkText, watermarkX, watermarkY, { angle: 45 });
   doc.restoreGraphicsState();
 
