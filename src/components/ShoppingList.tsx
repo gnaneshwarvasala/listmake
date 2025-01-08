@@ -4,6 +4,7 @@ import ListHeader from "./ListHeader";
 import EnhancedListItem from "./EnhancedListItem";
 import ListActions from "./ListActions";
 import ListControls from "./ListControls";
+import ProgressBar from "./Progress";
 import { showToast } from "@/utils/toastConfig";
 import { useListManagement } from "@/hooks/useListManagement";
 
@@ -46,6 +47,8 @@ const ShoppingList = () => {
     item.text.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const completedCount = items.filter(item => item.isCollected).length;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gradient-start to-gradient-end dark:from-gray-900 dark:to-gray-800 p-3 md:p-6 transition-all duration-500">
       <div className="w-full max-w-4xl mx-auto space-y-4">
@@ -58,6 +61,13 @@ const ShoppingList = () => {
             customTitle={customTitle}
             onCustomTitleChange={setCustomTitle}
           />
+          
+          {items.length > 0 && (
+            <ProgressBar
+              total={items.length}
+              completed={completedCount}
+            />
+          )}
           
           <ListControls
             showPricing={showPricing}
