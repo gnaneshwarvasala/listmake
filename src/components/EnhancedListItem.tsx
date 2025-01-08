@@ -42,12 +42,12 @@ const EnhancedListItem = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            "group relative flex items-center gap-3 p-2.5 transition-all duration-300",
+            "group relative flex items-center gap-3 p-2 transition-all duration-300",
             "max-w-xl mx-auto rounded-xl border shadow-sm hover:shadow-md",
-            "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm",
+            "bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm",
             "transform hover:-translate-y-0.5 transition-transform duration-200",
-            isCollected && "bg-gradient-to-r from-primary-light/10 to-primary/10 scale-[0.98]",
-            isHighlighted && "ring-2 ring-primary/30",
+            isCollected && "bg-gradient-to-r from-primary-light/10 to-primary/10 dark:from-primary/20 dark:to-primary-light/20 scale-[0.98]",
+            isHighlighted && "ring-2 ring-primary/30 dark:ring-primary/50",
             !isLocked && "cursor-grab active:cursor-grabbing",
             snapshot.isDragging && "rotate-1 scale-105 shadow-lg",
           )}
@@ -57,8 +57,8 @@ const EnhancedListItem = ({
             className={cn(
               "flex h-5 w-5 items-center justify-center rounded-full border transition-all duration-300",
               isCollected 
-                ? "border-primary-light bg-primary-light scale-110" 
-                : "border-gray-300 dark:border-gray-600 hover:border-primary-light"
+                ? "border-primary-light bg-primary-light dark:border-primary dark:bg-primary scale-110" 
+                : "border-gray-300 dark:border-gray-500 hover:border-primary-light dark:hover:border-primary"
             )}
           >
             {isCollected && (
@@ -69,12 +69,14 @@ const EnhancedListItem = ({
           <span
             className={cn(
               "flex-1 text-sm font-medium transition-all duration-300",
-              isCollected ? "text-gray-500 dark:text-gray-400" : "text-gray-700 dark:text-gray-200"
+              isCollected 
+                ? "text-gray-500 dark:text-gray-400" 
+                : "text-gray-700 dark:text-gray-200"
             )}
           >
             {text}
             {isCollected && (
-              <span className="ml-2 text-xs text-primary-light italic animate-fade-in">
+              <span className="ml-2 text-xs text-primary-light dark:text-primary italic animate-fade-in">
                 Completed
               </span>
             )}
@@ -82,7 +84,7 @@ const EnhancedListItem = ({
           
           {showPricing && (
             <div className="flex items-center gap-1">
-              <span className="text-gray-400 dark:text-gray-500 text-xs">{currencySymbol}</span>
+              <span className="text-gray-400 dark:text-gray-300 text-xs">{currencySymbol}</span>
               <Input
                 type="number"
                 value={price || ""}
@@ -90,7 +92,7 @@ const EnhancedListItem = ({
                   e.stopPropagation();
                   onUpdatePrice?.(id, parseFloat(e.target.value) || 0);
                 }}
-                className="w-16 h-6 text-xs rounded-lg bg-white/90 dark:bg-gray-800/90"
+                className="w-16 h-6 text-xs rounded-lg bg-white/90 dark:bg-gray-700/90 dark:text-gray-200"
                 placeholder="0.00"
                 step="0.01"
                 min="0"
@@ -110,7 +112,7 @@ const EnhancedListItem = ({
                 onDelete(id);
               }}
             >
-              <Trash2 className="h-3 w-3 text-red-500 transform hover:scale-110 transition-transform duration-200" />
+              <Trash2 className="h-3 w-3 text-red-500 dark:text-red-400 transform hover:scale-110 transition-transform duration-200" />
             </Button>
           )}
         </div>
