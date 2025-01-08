@@ -50,13 +50,6 @@ const Privacy = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-gray-200">Security</h2>
-            <p>
-              Since all data is stored locally on your device, security is managed by your browser's built-in protections. We recommend keeping your browser updated to ensure the best security.
-            </p>
-          </section>
-
-          <section>
             <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-gray-200">Updates to Privacy Policy</h2>
             <p>
               Any changes to this privacy policy will be posted on this page. As we don't collect user data, any updates will primarily relate to changes in functionality or local storage usage.
