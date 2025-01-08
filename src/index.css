@@ -58,6 +58,32 @@
     @apply bg-background text-foreground font-inter antialiased;
   }
 
+  /* Enhanced dark mode input styling */
+  .dark input {
+    @apply text-gray-100 placeholder-gray-400 bg-gray-800/50 border-gray-700;
+  }
+
+  .dark input:focus {
+    @apply border-blue-400 ring-blue-400/20;
+  }
+
+  .dark textarea {
+    @apply text-gray-100 placeholder-gray-400 bg-gray-800/50 border-gray-700;
+  }
+
+  .dark textarea:focus {
+    @apply border-blue-400 ring-blue-400/20;
+  }
+
+  /* Character counter styling */
+  .char-counter {
+    @apply text-xs text-gray-500 dark:text-gray-400 mt-1;
+  }
+
+  .char-counter.limit-reached {
+    @apply text-red-500 dark:text-red-400;
+  }
+
   input::placeholder {
     @apply dark:text-gray-400;
   }

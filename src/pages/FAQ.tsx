@@ -1,64 +1,79 @@
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Textarea } from "@/components/ui/textarea";
+import LimitedInput from "@/components/LimitedInput";
+import { toast } from "sonner";
 
 const FAQ = () => {
-  const navigate = useNavigate();
-  
+  const [question, setQuestion] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (question.trim()) {
+      toast.success("Question submitted successfully!");
+      setQuestion('');
+    } else {
+      toast.error("Please enter your question");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-8">
-      <div className="max-w-2xl mx-auto bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-8 shadow-lg">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate(-1)}
-          className="mb-4 dark:text-gray-300 dark:hover:text-white"
-        >
-          ← Back
-        </Button>
-        <h1 className="text-3xl font-bold mb-6 dark:text-gray-100">Frequently Asked Questions</h1>
-        <Accordion type="single" collapsible className="w-full space-y-2">
-          <AccordionItem value="item-1" className="dark:border-gray-700">
-            <AccordionTrigger className="dark:text-gray-200">How do I create and manage lists?</AccordionTrigger>
-            <AccordionContent className="dark:text-gray-300">
-              Creating a list is simple! Click the "+" button to add new items. You can drag and drop items to reorder them, mark them as complete with a checkbox, and delete items using the trash icon. Lists can be categorized and customized with different titles and settings.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2" className="dark:border-gray-700">
-            <AccordionTrigger className="dark:text-gray-200">What does the lock feature do?</AccordionTrigger>
-            <AccordionContent className="dark:text-gray-300">
-              The lock feature prevents accidental changes to your list. When locked, you can't add, delete, or reorder items, but you can still mark items as complete. This is particularly useful when sharing lists with others or when you want to preserve a specific order.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-3" className="dark:border-gray-700">
-            <AccordionTrigger className="dark:text-gray-200">How does the pricing feature work?</AccordionTrigger>
-            <AccordionContent className="dark:text-gray-300">
-              The pricing feature allows you to add costs to list items. Toggle it on using the price switch, then enter prices for each item. The total is automatically calculated and displayed at the bottom of your list. You can also customize the currency symbol.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-4" className="dark:border-gray-700">
-            <AccordionTrigger className="dark:text-gray-200">Can I share my lists with others?</AccordionTrigger>
-            <AccordionContent className="dark:text-gray-300">
-              Yes! You can share lists via email or generate a shareable link. You can also export lists as PDF files for easy sharing or printing. Consider locking the list before sharing to prevent unwanted changes.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-5" className="dark:border-gray-700">
-            <AccordionTrigger className="dark:text-gray-200">How do I use dark mode?</AccordionTrigger>
-            <AccordionContent className="dark:text-gray-300">
-              Click the sun/moon icon in the top right corner to toggle between light and dark modes. Your preference will be saved automatically for future visits.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-6" className="dark:border-gray-700">
-            <AccordionTrigger className="dark:text-gray-200">Is my data saved automatically?</AccordionTrigger>
-            <AccordionContent className="dark:text-gray-300">
-              Yes, all changes are saved automatically to your browser's local storage. However, clearing your browser data will remove your lists, so consider exporting important lists as PDFs for backup.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <h1 className="text-3xl font-bold mb-8">Frequently Asked Questions</h1>
+      
+      <div className="space-y-8 mb-12">
+        <div className="bg-card rounded-lg p-6 shadow-sm">
+          <h2 className="text-xl font-semibold mb-4">Common Questions</h2>
+          
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-medium mb-2">How do I create a new list?</h3>
+              <p className="text-muted-foreground">
+                To create a new list, simply click the "+" button on the main page. You can choose from different list types like grocery, todo, or custom lists.
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="font-medium mb-2">Can I share my lists with others?</h3>
+              <p className="text-muted-foreground">
+                Yes! Each list has a share button that allows you to share via email or generate a shareable link.
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="font-medium mb-2">How do I organize items in my list?</h3>
+              <p className="text-muted-foreground">
+                You can drag and drop items to reorder them. Lists can also be sorted alphabetically or by completion status.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-card rounded-lg p-6 shadow-sm">
+          <h2 className="text-xl font-semibold mb-4">Ask a Question</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="question" className="block text-sm font-medium mb-2">
+                Your Question
+              </label>
+              <Textarea
+                id="question"
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="Type your question here..."
+                className="min-h-[100px]"
+                maxLength={500}
+              />
+              <div className="char-counter mt-1">
+                {question.length}/500 characters
+              </div>
+            </div>
+            
+            <Button type="submit">
+              Submit Question
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );
