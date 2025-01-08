@@ -1,8 +1,9 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Lock, Unlock } from "lucide-react";
+import { Lock, Unlock, Sun, Moon } from "lucide-react";
 import CategorySelector, { CategoryType } from "./CategorySelector";
+import { useTheme } from "next-themes";
 
 interface ListHeaderProps {
   category: CategoryType;
@@ -21,6 +22,8 @@ const ListHeader = ({
   customTitle,
   onCustomTitleChange
 }: ListHeaderProps) => {
+  const { theme, setTheme } = useTheme();
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -39,17 +42,29 @@ const ListHeader = ({
             </h1>
           )}
         </div>
-        <Button
-          variant="outline"
-          onClick={onToggleLock}
-          className={`transition-colors duration-300 ${isLocked ? "bg-primary/10" : ""}`}
-        >
-          {isLocked ? (
-            <Lock className="h-5 w-5 text-primary" />
-          ) : (
-            <Unlock className="h-5 w-5" />
-          )}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="w-8 h-8 rounded-lg transition-colors hover:bg-accent"
+          >
+            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-orange-500" />
+            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-purple-500" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onToggleLock}
+            className={`transition-colors duration-300 ${isLocked ? "bg-primary/10" : ""}`}
+          >
+            {isLocked ? (
+              <Lock className="h-5 w-5 text-primary" />
+            ) : (
+              <Unlock className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
       </div>
       <CategorySelector category={category} onCategoryChange={onCategoryChange} />
     </div>
