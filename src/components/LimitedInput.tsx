@@ -42,11 +42,11 @@ const LimitedInput = ({
         {...props}
         value={inputValue}
         onChange={handleChange}
-        className={className}
+        className={`dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 ${className}`}
         maxLength={maxLength}
       />
       {showCounter && (
-        <div className={`char-counter ${charCount >= maxLength ? 'limit-reached' : ''}`}>
+        <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           {charCount}/{maxLength} characters
         </div>
       )}
