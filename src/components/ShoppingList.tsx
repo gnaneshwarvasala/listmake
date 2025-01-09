@@ -111,6 +111,7 @@ const ShoppingList = () => {
                       onUpdatePrice={updateItemPrice}
                       currencySymbol={currencySymbol}
                       isHighlighted={searchTerm && item.text.toLowerCase().includes(searchTerm.toLowerCase())}
+                      nextItemId={index < filteredItems.length - 1 ? filteredItems[index + 1].id : null}
                     />
                   ))}
                   {provided.placeholder}

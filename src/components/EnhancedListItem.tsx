@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Check, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,7 @@ interface EnhancedListItemProps {
   onToggleCollected: (id: string) => void;
   onDelete: (id: string) => void;
   onUpdatePrice?: (id: string, price: number) => void;
+  nextItemId?: string | null;
 }
 
 const EnhancedListItem = ({
@@ -32,8 +33,24 @@ const EnhancedListItem = ({
   isHighlighted,
   onToggleCollected,
   onDelete,
-  onUpdatePrice
+  onUpdatePrice,
+  nextItemId
 }: EnhancedListItemProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextItemId) {
+        // Find and focus the next input
+        const nextInput = document.querySelector(`input[data-item-id="${nextItemId}"]`) as HTMLInputElement;
+        if (nextInput) {
+          nextInput.focus();
+        }
+      }
+    }
+  };
+
   return (
     <Draggable draggableId={id} index={index} isDragDisabled={isLocked}>
       {(provided, snapshot) => (
@@ -90,13 +107,21 @@ const EnhancedListItem = ({
             <div className="flex-shrink-0 flex items-center gap-1">
               <span className="text-gray-400 dark:text-gray-300 text-xs">{currencySymbol}</span>
               <Input
+                ref={inputRef}
                 type="number"
                 value={price || ""}
                 onChange={(e) => {
                   e.stopPropagation();
                   onUpdatePrice?.(id, parseFloat(e.target.value) || 0);
                 }}
-                className="w-14 h-6 text-xs rounded-md bg-white/90 dark:bg-gray-700/90 dark:text-gray-200 px-1"
+                onKeyPress={handleKeyPress}
+                data-item-id={id}
+                className={cn(
+                  "w-14 h-6 text-xs rounded-md bg-white/90 dark:bg-gray-700/90 dark:text-gray-200 px-1",
+                  "focus:ring-2 focus:ring-primary/30 dark:focus:ring-blue-400/30",
+                  "focus:border-primary dark:focus:border-blue-400",
+                  "transition-all duration-200"
+                )}
                 placeholder="0.00"
                 step="0.01"
                 min="0"
