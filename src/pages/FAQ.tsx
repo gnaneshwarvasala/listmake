@@ -31,6 +31,34 @@ const FAQ = () => {
                 You can drag and drop items to reorder them. Lists can also be sorted alphabetically or by completion status.
               </p>
             </div>
+
+            <div>
+              <h3 className="font-medium mb-2 dark:text-gray-200">Can I export my lists?</h3>
+              <p className="text-muted-foreground dark:text-gray-300">
+                Yes, you can export your lists to PDF format for easy sharing or printing. Look for the export option in the list menu.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-medium mb-2 dark:text-gray-200">Is there a limit to how many lists I can create?</h3>
+              <p className="text-muted-foreground dark:text-gray-300">
+                No, you can create as many lists as you need. There's no limit to the number of lists or items within each list.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-medium mb-2 dark:text-gray-200">Can I use the app offline?</h3>
+              <p className="text-muted-foreground dark:text-gray-300">
+                Yes, the app works offline. Your lists are stored locally on your device, and any changes will sync when you're back online.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-medium mb-2 dark:text-gray-200">How do I delete a list?</h3>
+              <p className="text-muted-foreground dark:text-gray-300">
+                To delete a list, open the list menu (three dots) and select the delete option. You'll be asked to confirm before the list is permanently removed.
+              </p>
+            </div>
           </div>
         </div>
       </div>
