@@ -8,6 +8,7 @@ export const showToast = {
       color: "#065F46",
     },
     duration: 3000,
+    className: "mobile:scale-90 mobile:text-sm",
   }),
   error: (message: string) => toast.error(message, {
     style: {
@@ -16,6 +17,7 @@ export const showToast = {
       color: "#991B1B",
     },
     duration: 3000,
+    className: "mobile:scale-90 mobile:text-sm",
   }),
   info: (message: string) => toast.info(message, {
     style: {
@@ -24,5 +26,6 @@ export const showToast = {
       color: "#1E40AF",
     },
     duration: 3000,
+    className: "mobile:scale-90 mobile:text-sm",
   })
 };

@@ -58,6 +58,19 @@
     @apply bg-background text-foreground font-inter antialiased;
   }
 
+  /* Enhanced dark mode list visibility */
+  .dark .list-item {
+    @apply bg-gray-800/90 border-gray-700;
+  }
+
+  .dark .list-item:hover {
+    @apply bg-gray-700/90 border-gray-600;
+  }
+
+  .dark .list-text {
+    @apply text-gray-100;
+  }
+
   /* Enhanced dark mode input styling */
   .dark input {
     @apply text-gray-100 placeholder-gray-400 bg-gray-800/50 border-gray-700;
@@ -73,6 +86,17 @@
 
   .dark textarea:focus {
     @apply border-blue-400 ring-blue-400/20;
+  }
+
+  /* Responsive notification styling */
+  @media (max-width: 768px) {
+    [data-sonner-toaster] {
+      @apply max-w-[90%] right-[5%] left-[5%] bottom-4;
+    }
+
+    [data-sonner-toast] {
+      @apply text-sm py-2 px-3;
+    }
   }
 
   /* Character counter styling */
