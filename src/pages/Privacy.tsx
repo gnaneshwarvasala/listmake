@@ -36,13 +36,6 @@ const Privacy = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-gray-200">Cookies & Tracking</h2>
-            <p>
-              We don't use any tracking cookies or analytics tools. Your usage of the application is completely private and not monitored.
-            </p>
-          </section>
-
-          <section>
             <h2 className="text-xl font-semibold mt-8 mb-4 dark:text-gray-200">Data Sharing</h2>
             <p>
               We don't share any information with third parties because we don't collect any information in the first place. When you choose to share a list, it's done directly through your own email client or by generating a local PDF file.
