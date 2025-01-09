@@ -47,6 +47,7 @@ const EnhancedListItem = ({
             "bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm",
             "transform hover:-translate-y-0.5 transition-transform duration-200",
             "min-h-[50px] max-h-[100px]",
+            "dark:border-gray-700 dark:shadow-lg dark:shadow-black/20",
             isCollected && "bg-gradient-to-r from-primary-light/10 to-primary/10 dark:from-primary/20 dark:to-primary-light/20 scale-[0.98]",
             isHighlighted && "ring-2 ring-primary/30 dark:ring-primary/50",
             !isLocked && "cursor-grab active:cursor-grabbing",
@@ -58,8 +59,8 @@ const EnhancedListItem = ({
             className={cn(
               "flex-shrink-0 flex h-4 w-4 items-center justify-center rounded-full border transition-all duration-300 mt-0.5",
               isCollected 
-                ? "border-primary-light bg-primary-light dark:border-primary dark:bg-primary scale-110" 
-                : "border-gray-300 dark:border-gray-500 hover:border-primary-light dark:hover:border-primary"
+                ? "border-primary-light bg-primary-light dark:border-blue-400 dark:bg-blue-400 scale-110" 
+                : "border-gray-300 dark:border-gray-500 hover:border-primary-light dark:hover:border-blue-400"
             )}
           >
             {isCollected && (
@@ -78,7 +79,7 @@ const EnhancedListItem = ({
             >
               {text}
               {isCollected && (
-                <span className="ml-2 text-xs text-primary-light dark:text-primary italic animate-fade-in">
+                <span className="ml-2 text-xs text-blue-400 dark:text-blue-300 italic animate-fade-in">
                   Completed
                 </span>
               )}

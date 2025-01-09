@@ -12,7 +12,7 @@ const ProgressBar = ({ total, completed }: ProgressBarProps) => {
   return (
     <div className="w-full max-w-2xl mx-auto mb-6 space-y-3">
       <div className="flex justify-between text-sm font-medium">
-        <span className="text-gray-600 dark:text-gray-400">
+        <span className="text-gray-600 dark:text-gray-300">
           {completed} of {total} completed
         </span>
         <span className={`font-semibold transition-colors duration-300 ${
