@@ -8,7 +8,6 @@ export const showToast = {
       color: "#065F46",
     },
     duration: 3000,
-    dismissible: true,
     className: "mobile:max-w-[90vw] mobile:text-sm",
   }),
   error: (message: string) => toast.error(message, {
@@ -18,7 +17,6 @@ export const showToast = {
       color: "#991B1B",
     },
     duration: 3000,
-    dismissible: true,
     className: "mobile:max-w-[90vw] mobile:text-sm",
   }),
   info: (message: string) => toast.info(message, {
@@ -28,7 +26,6 @@ export const showToast = {
       color: "#1E40AF",
     },
     duration: 3000,
-    dismissible: true,
     className: "mobile:max-w-[90vw] mobile:text-sm",
   })
 };
