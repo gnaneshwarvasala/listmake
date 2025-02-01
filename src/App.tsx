@@ -18,12 +18,9 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner 
-          position="top-right" 
+          position="top-right"
           closeButton
           duration={3000}
-          dismissible
-          richColors
-          expand
           theme="system"
           className="font-inter z-50"
           toastOptions={{
