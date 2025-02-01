@@ -19,15 +19,22 @@ const App = () => (
         <Toaster />
         <Sonner 
           position="top-right" 
-          closeButton 
+          closeButton
           duration={3000}
+          dismissible
+          richColors
+          expand
           theme="system"
-          className="font-inter"
+          className="font-inter z-50"
           toastOptions={{
             classNames: {
-              toast: "font-inter dark:bg-gray-800 dark:text-white",
+              toast: "font-inter dark:bg-gray-800 dark:text-white max-w-[350px] mobile:max-w-[90vw]",
               title: "font-semibold",
               description: "text-sm"
+            },
+            style: {
+              background: 'var(--background)',
+              border: '1px solid var(--border)',
             }
           }}
         />
