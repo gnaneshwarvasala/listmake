@@ -1,6 +1,6 @@
 import { List, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
-import ThemeToggle from "./ThemeToggle";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Header = () => {
   return (
