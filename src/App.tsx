@@ -20,12 +20,12 @@ const App = () => (
         <Sonner 
           position="top-right"
           closeButton={false}
-          duration={3000}
+          duration={2500}
           theme="system"
-          className="font-inter z-[100]"
+          className="font-inter"
           toastOptions={{
             classNames: {
-              toast: "font-inter dark:bg-gray-800 dark:text-white max-w-[350px] mobile:max-w-[90vw] pointer-events-auto",
+              toast: "font-inter dark:bg-gray-800 dark:text-white max-w-[350px] mobile:max-w-[90vw] pointer-events-none",
               title: "font-semibold",
               description: "text-sm"
             },

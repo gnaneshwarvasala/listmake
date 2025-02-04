@@ -7,8 +7,9 @@ export const showToast = {
       border: "1px solid #6EE7B7",
       color: "#065F46",
     },
-    duration: 3000,
-    className: "mobile:max-w-[90vw] mobile:text-sm pointer-events-auto",
+    duration: 2500,
+    className: "mobile:max-w-[90vw] mobile:text-sm pointer-events-none",
+    dismissible: false
   }),
   error: (message: string) => toast.error(message, {
     style: {
@@ -16,8 +17,9 @@ export const showToast = {
       border: "1px solid #FCA5A5",
       color: "#991B1B",
     },
-    duration: 3000,
-    className: "mobile:max-w-[90vw] mobile:text-sm pointer-events-auto",
+    duration: 2500,
+    className: "mobile:max-w-[90vw] mobile:text-sm pointer-events-none",
+    dismissible: false
   }),
   info: (message: string) => toast.info(message, {
     style: {
@@ -25,7 +27,8 @@ export const showToast = {
       border: "1px solid #93C5FD",
       color: "#1E40AF",
     },
-    duration: 3000,
-    className: "mobile:max-w-[90vw] mobile:text-sm pointer-events-auto",
+    duration: 2500,
+    className: "mobile:max-w-[90vw] mobile:text-sm pointer-events-none",
+    dismissible: false
   })
 };
