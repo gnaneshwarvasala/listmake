@@ -49,7 +49,7 @@
     --input: 217 32% 23%;
     --ring: 212.7 26.8% 83.9%;
   }
-  
+
   * {
     @apply border-border;
   }
@@ -89,13 +89,31 @@
   }
 
   /* Responsive notification styling */
+  .notification-container {
+    position: fixed !important;
+    top: env(safe-area-inset-top, 16px) !important;
+    right: env(safe-area-inset-right, 16px) !important;
+    z-index: 100 !important;
+    pointer-events: none !important;
+  }
+
+  .notification-toast {
+    pointer-events: none !important;
+    touch-action: none !important;
+    user-select: none !important;
+  }
+
   @media (max-width: 768px) {
     [data-sonner-toaster] {
       @apply max-w-[90%] right-[5%] left-[5%] bottom-4;
+      position: fixed !important;
+      top: env(safe-area-inset-top, 16px) !important;
     }
 
     [data-sonner-toast] {
       @apply text-sm py-2 px-3;
+      pointer-events: none !important;
+      touch-action: none !important;
     }
   }
 

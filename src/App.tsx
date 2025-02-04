@@ -22,10 +22,10 @@ const App = () => (
           closeButton={false}
           duration={2500}
           theme="system"
-          className="font-inter"
+          className="font-inter notification-container"
           toastOptions={{
             classNames: {
-              toast: "font-inter dark:bg-gray-800 dark:text-white max-w-[350px] mobile:max-w-[90vw] pointer-events-none",
+              toast: "font-inter dark:bg-gray-800 dark:text-white max-w-[350px] mobile:max-w-[90vw] pointer-events-none notification-toast",
               title: "font-semibold",
               description: "text-sm"
             },
