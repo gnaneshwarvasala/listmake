@@ -19,13 +19,13 @@ const App = () => (
         <Toaster />
         <Sonner 
           position="top-right"
-          closeButton
+          closeButton={false}
           duration={3000}
           theme="system"
-          className="font-inter z-50"
+          className="font-inter z-[100]"
           toastOptions={{
             classNames: {
-              toast: "font-inter dark:bg-gray-800 dark:text-white max-w-[350px] mobile:max-w-[90vw]",
+              toast: "font-inter dark:bg-gray-800 dark:text-white max-w-[350px] mobile:max-w-[90vw] pointer-events-auto",
               title: "font-semibold",
               description: "text-sm"
             },
