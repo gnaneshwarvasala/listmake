@@ -1,11 +1,14 @@
 import ShoppingList from "@/components/ShoppingList";
 import FloatingCircles from "@/components/FloatingCircles";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gradient-start to-gradient-end dark:from-gray-900 dark:to-gray-800">
       <FloatingCircles />
+      <Header />
+      
       {/* Top Ad Space */}
       <div className="w-full max-w-[728px] h-[90px] mx-auto mb-4 hidden md:block">
         <ins className="adsbygoogle"
